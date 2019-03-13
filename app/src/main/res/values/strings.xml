@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Vancomycin</string>
+    <string name="title_home">Initial dose</string>
+    <string name="title_dashboard">AUC calculator</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="calculate_initial_dose">Calculate initial dose</string>
+    <string name="input_patient_data_to_estimate_initial_auc_targeted_dosing_regimen">Input patient data to estimate initial AUC-targeted dosing regimen</string>
+    <string name="chosen_goal_auc24">Chosen Goal AUC24</string>
+    <string name="input_goal">Input goal</string>
+    <string name="crcl_ml_min">CrCL (ml/min)</string>
+    <string name="input_crcl">Input CrCL</string>
+    <string name="total_body_weight_kg">Total body weight (kg)</string>
+    <string name="input_weight_in_kg">Input weight in kg</string>
+    <string name="age">Age</string>
+    <string name="input_age_in_years">Input age in years</string>
+    <string name="scr">SCr</string>
+    <string name="input_scr">Input SCr</string>
+</resources>
