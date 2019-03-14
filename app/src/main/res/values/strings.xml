@@ -17,4 +17,6 @@
     <string name="input_scr">Input SCr</string>
     <string name="sex">Sex</string>
     <string name="obese_bmi_30">Obese (BMI ≥ 30)</string>
+    <string name="cns_infection">CNS infection</string>
+    <string name="calculate_dose">Calculate dose</string>
 </resources>
