@@ -15,4 +15,6 @@
     <string name="input_age_in_years">Input age in years</string>
     <string name="scr">SCr</string>
     <string name="input_scr">Input SCr</string>
+    <string name="sex">Sex</string>
+    <string name="obese_bmi_30">Obese (BMI ≥ 30)</string>
 </resources>
