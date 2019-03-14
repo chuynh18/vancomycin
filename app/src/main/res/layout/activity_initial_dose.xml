@@ -60,12 +60,12 @@
                 android:text="@string/chosen_goal_auc24"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editText"
+                app:layout_constraintEnd_toStartOf="@+id/ID_AUC_Input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/ID_AUC_Input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -96,12 +96,12 @@
                 android:text="@string/crcl_ml_min"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editText2"
+                app:layout_constraintEnd_toStartOf="@+id/ID_CrCL_Input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/ID_CrCL_Input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -132,12 +132,12 @@
                 android:text="@string/total_body_weight_kg"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editText3"
+                app:layout_constraintEnd_toStartOf="@+id/ID_BodyWeight_Input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/ID_BodyWeight_Input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -168,12 +168,12 @@
                 android:text="@string/age"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editText4"
+                app:layout_constraintEnd_toStartOf="@+id/ID_Age_Input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/ID_Age_Input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -205,12 +205,12 @@
                 android:text="@string/scr"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editText5"
+                app:layout_constraintEnd_toStartOf="@+id/ID_SCr_Input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/ID_SCr_Input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -241,12 +241,12 @@
                 android:text="@string/sex"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/spinner"
+                app:layout_constraintEnd_toStartOf="@+id/ID_Sex_Input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
-                android:id="@+id/spinner"
+                android:id="@+id/ID_Sex_Input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -276,12 +276,12 @@
                 android:text="@string/obese_bmi_30"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ID_Obese_checkBox"
+                app:layout_constraintEnd_toStartOf="@+id/ID_Obese_Input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
-                android:id="@+id/ID_Obese_checkBox"
+                android:id="@+id/ID_Obese_Input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -296,42 +296,53 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
+            app:layout_constraintBottom_toTopOf="@+id/ID_Calculate_Button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/ID_CNS"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@string/cns_infection"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ID_CNS"
+                app:layout_constraintEnd_toStartOf="@+id/ID_CNS_Input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
-                android:id="@+id/ID_CNS"
+                android:id="@+id/ID_CNS_Input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView9"
+                app:layout_constraintStart_toEndOf="@+id/ID_CNS"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/ID_CNS_Info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/adjusts_goal_auc_to_600"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ID_CNS_Input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ID_CNS" />
 
         </android.support.constraint.ConstraintLayout>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/ID_Calculate_Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:onClick="calculateButtonPressed"
             android:text="@string/calculate_dose"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
