@@ -1,6 +1,7 @@
 package yolo.tbv.vancomycin;
 
 import android.graphics.Color;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -21,7 +22,7 @@ public class InitialDose extends AppCompatActivity {
     android.widget.Spinner SexInput;
     android.widget.CheckBox ObeseInput;
     android.widget.CheckBox CNS_Input;
-    android.widget.TextView AUC_Result;
+
     boolean isObese;
 
     // holds onto original value of AUC24, used by CNS_Input.setOnClickListener() in onCreate()
@@ -50,7 +51,6 @@ public class InitialDose extends AppCompatActivity {
         SexInput = findViewById(R.id.ID_Sex_Input);
         ObeseInput = findViewById(R.id.ID_Obese_Input);
         CNS_Input = findViewById(R.id.ID_CNS_Input);
-        AUC_Result = findViewById(R.id.ID_AUC_Dosing_result);
 
         CNS_Input.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +112,7 @@ public class InitialDose extends AppCompatActivity {
             int alternate30 = calculateObese((int) bodyWeight, 30);
 
             // show results
-            displayCalculatedDose(view, estimatedDailyDose);
+            displayCalculatedDose(view, isObese, estimatedDailyDose, alternate15, alternate20, alternate25, alternate30);
         } else {
             System.out.println("Inputs are NOT valid");
         }
@@ -205,9 +205,31 @@ public class InitialDose extends AppCompatActivity {
         return mgkg*bodyWeight;
     }
 
-    public void displayCalculatedDose(View view, double aucResult) {
+    public void displayCalculatedDose(View view, boolean isObese, double aucResult, double alt15, double alt20, double alt25, double alt30) {
+        ConstraintLayout Obesity_dosing = findViewById(R.id.ID_Obese_dosing);
+        android.widget.TextView AUC_Result = findViewById(R.id.ID_AUC_Dosing_result);
+        android.widget.TextView Obese_3020 = findViewById(R.id.ID_Obese_30_20);
+        android.widget.TextView Obese_3025 = findViewById(R.id.ID_Obese_30_25);
+        android.widget.TextView Obese_3030 = findViewById(R.id.ID_Obese_30_30);
+        android.widget.TextView Obese_4015 = findViewById(R.id.ID_Obese_40_15);
+        android.widget.TextView Obese_4020 = findViewById(R.id.ID_Obese_40_20);
+        android.widget.TextView Obese_4025 = findViewById(R.id.ID_Obese_40_25);
+
         String aucString = Double.toString(aucResult);
         AUC_Result.setText(aucString);
+
+        if (isObese) {
+            Obesity_dosing.setVisibility(View.VISIBLE);
+
+            Obese_3020.setText(Double.toString(alt20));
+            Obese_3025.setText(Double.toString(alt25));
+            Obese_3030.setText(Double.toString(alt30));
+            Obese_4015.setText(Double.toString(alt15));
+            Obese_4020.setText(Double.toString(alt20));
+            Obese_4025.setText(Double.toString(alt25));
+        } else {
+            Obesity_dosing.setVisibility(View.GONE);
+        }
     }
 }
 

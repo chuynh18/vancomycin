@@ -24,4 +24,19 @@
     <string name="auc_based_dosing">AUC-based dosing</string>
     <string name="_400">400</string>
     <string name="auc_value">AUC value</string>
+    <string name="weight_based_obesity_dosing_crcl_50_alternative_dosing"><![CDATA[Weight-based obesity dosing (CrCl > 50, alternative dosing)]]></string>
+    <string name="estimated_daily_dose_bmi_between_30_and_39_9">Estimated daily dose (BMI between 30 and 39.9)</string>
+    <string name="estimated_daily_dose_bmi_40_and_above">Estimated daily dose (BMI 40 and above)</string>
+    <string name="_25_mg_kg_d">25 mg/kg/d</string>
+    <string name="_30_mg_kg_d_upper_limit">30 mg/kg/d (upper limit)</string>
+    <string name="_30_20">30-20</string>
+    <string name="_30_25">30-25</string>
+    <string name="_15_mg_kg_d">15 mg/kg/d</string>
+    <string name="_25_mg_kg_d_upper_limit">25 mg/kg/d (upper limit)</string>
+    <string name="_30_30">30-30</string>
+    <string name="_40_15">40-15</string>
+    <string name="_40_20">40-20</string>
+    <string name="_40_25">40-25</string>
+    <string name="_20_mg_kg_d">20 mg/kg/d</string>
+    <string name="_20_mg_kg_d_30bmi">20 mg/kg/d</string>
 </resources>
