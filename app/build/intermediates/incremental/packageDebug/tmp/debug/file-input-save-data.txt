@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Fri Mar 15 02:39:03 PDT 2019
+#Fri Mar 15 03:15:23 PDT 2019
 1.base=C\:\\AndroidStudio\\projects\\Vancomycin\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\out
 0.baseType=DIRECTORY
 1.baseType=DIRECTORY
