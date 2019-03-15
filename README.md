@@ -2,4 +2,4 @@
 
 ## STRICTLY FOR EDUCATIONAL USE.  DO NOT USE AS PRIMARY METHOD TO CALCULATE DOSING FOR PATIENTS.
 
-UNDER DEVELOPMENT.  Will eventually calculate intial dose and subsequent doses.
+UNDER DEVELOPMENT.  Currently calculates initial dose.  May eventually calculate follow-up AUC dose.
