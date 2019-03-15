@@ -72,6 +72,7 @@ public class InitialDose extends AppCompatActivity {
         double age = Double.parseDouble(AgeInput.getText().toString());
         double scr = Double.parseDouble(SCrInput.getText().toString());
         double bodyWeight = Double.parseDouble(WeightInput.getText().toString());
+        double targetAUC = Double.parseDouble(AUCInput.getText().toString());
         isObese = ObeseInput.isChecked();
 
         resetHints();
@@ -102,6 +103,7 @@ public class InitialDose extends AppCompatActivity {
             double clvanGeneral = calculateClvanGeneral(Ke, Vd);
             double clvanObese = calculateClvanObese(age, scr, sexCalculateObeseClvan, bodyWeight);
             double finalClvan = calculateCappedClvanFinal(isObese, clvanGeneral, clvanObese);
+            double estimatedDailyDose = calculateEDDFinal(finalClvan, targetAUC);
         } else {
             System.out.println("Inputs are NOT valid");
         }
@@ -176,6 +178,17 @@ public class InitialDose extends AppCompatActivity {
 
         System.out.println("clvan final: " + clvanFinal);
         return clvanFinal;
+    }
+
+    public double calculateEDDFinal(double clvancoFinal, double targetAUC) {
+        double calculatedEDD = clvancoFinal * targetAUC;
+
+        if (calculatedEDD > 4500) {
+            return 4500;
+        }
+
+        System.out.println("calculated EDD: " + calculatedEDD);
+        return calculatedEDD;
     }
 }
 
