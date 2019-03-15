@@ -6,7 +6,7 @@
     density="560dpi"
     format="10"
     plugin-version="3.3.2"
-    timestamp="1552640194321"
+    timestamp="1552642586249"
     token="9032386309425966886"
     verifier="COMPATIBLE" >
 
@@ -73,25 +73,21 @@
     </build>
     <build
         build-mode="COLD"
-        timestamp="1552638223235"
+        timestamp="1552642491479"
+        verifier="FIELD_REMOVED" >
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
+            type="SPLIT_MAIN" />
+    </build>
+    <build
+        build-mode="COLD"
+        timestamp="1552642547143"
         verifier="R_CLASS_CHANGE" >
         <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
-            type="SPLIT" />
-        <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
             type="SPLIT" />
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
@@ -100,31 +96,27 @@
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
             type="SPLIT" />
         <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
             type="SPLIT" />
-    </build>
-    <build
-        build-mode="COLD"
-        timestamp="1552640045973"
-        verifier="COLD_SWAP_REQUESTED" >
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
+            type="SPLIT" />
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
             type="SPLIT" />
         <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
-            type="SPLIT_MAIN" />
-    </build>
-    <build
-        build-mode="HOT_WARM"
-        timestamp="1552640184548"
-        verifier="COMPATIBLE" >
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
+            type="SPLIT" />
         <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\builds\debug\1552640184548\classes.dex"
-            type="RELOAD_DEX" />
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
+            type="SPLIT" />
     </build>
     <build
         build-mode="HOT_WARM"
-        timestamp="1552640194321"
+        timestamp="1552642586249"
         verifier="COMPATIBLE" >
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"

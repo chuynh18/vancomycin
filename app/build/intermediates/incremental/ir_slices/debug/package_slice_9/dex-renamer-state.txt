@@ -1,4 +1,4 @@
-#Fri Mar 15 01:23:45 PDT 2019
+#Fri Mar 15 02:35:49 PDT 2019
 base.0=C\:\\AndroidStudio\\projects\\Vancomycin\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\9
 path.0=classes.dex
 renamed.0=classes.dex

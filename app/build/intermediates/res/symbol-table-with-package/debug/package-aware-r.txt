@@ -1455,6 +1455,7 @@ string estimated_initial_dose
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
 string hide_bottom_view_on_scroll_behavior
+string initial_dose_navbar
 string input_age_in_years
 string input_crcl
 string input_goal

@@ -15,15 +15,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class InitialDose extends AppCompatActivity {
-    android.widget.EditText AUCInput;
-    android.widget.EditText CrClInput;
-    android.widget.EditText WeightInput;
-    android.widget.EditText AgeInput;
-    android.widget.EditText SCrInput;
-    android.widget.Spinner SexInput;
-    android.widget.CheckBox ObeseInput;
-    android.widget.CheckBox CNS_Input;
-    ConstraintLayout Dosing;
+    private android.widget.EditText AUCInput;
+    private android.widget.EditText CrClInput;
+    private android.widget.EditText WeightInput;
+    private android.widget.EditText AgeInput;
+    private android.widget.EditText SCrInput;
+    private android.widget.Spinner SexInput;
+    private android.widget.CheckBox ObeseInput;
+    private android.widget.CheckBox CNS_Input;
+    private ConstraintLayout Dosing;
 
     boolean isObese;
 
