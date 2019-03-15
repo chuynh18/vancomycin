@@ -21,6 +21,7 @@ public class InitialDose extends AppCompatActivity {
     android.widget.Spinner SexInput;
     android.widget.CheckBox ObeseInput;
     android.widget.CheckBox CNS_Input;
+    boolean isObese;
 
     // holds onto original value of AUC24, used by CNS_Input.setOnClickListener() in onCreate()
     String CNSOriginalValue;
@@ -71,6 +72,7 @@ public class InitialDose extends AppCompatActivity {
         double age = Double.parseDouble(AgeInput.getText().toString());
         double scr = Double.parseDouble(SCrInput.getText().toString());
         double bodyWeight = Double.parseDouble(WeightInput.getText().toString());
+        isObese = ObeseInput.isChecked();
 
         resetHints();
 
@@ -99,6 +101,7 @@ public class InitialDose extends AppCompatActivity {
             double Vd = calculateVd(bodyWeight);
             double clvanGeneral = calculateClvanGeneral(Ke, Vd);
             double clvanObese = calculateClvanObese(age, scr, sexCalculateObeseClvan, bodyWeight);
+            double finalClvan = calculateCappedClvanFinal(isObese, clvanGeneral, clvanObese);
         } else {
             System.out.println("Inputs are NOT valid");
         }
@@ -156,6 +159,23 @@ public class InitialDose extends AppCompatActivity {
         double clvanObese = 9.565 - (0.078*age) - (2.009*scr) + (1.09*sexIdMinus1) + (0.04*Math.pow(bodyWeight, 0.75));
         System.out.println("Clvan obese: " + clvanObese);
         return clvanObese;
+    }
+
+    public double calculateCappedClvanFinal(boolean isObese, double clvanGeneral, double clvanObese) {
+        System.out.println("isObese: " + isObese);
+
+        double clvanFinal = clvanGeneral;
+
+        if (isObese) {
+            clvanFinal = clvanObese;
+        }
+
+        if (clvanFinal > 9) {
+            return 9;
+        }
+
+        System.out.println("clvan final: " + clvanFinal);
+        return clvanFinal;
     }
 }
 
