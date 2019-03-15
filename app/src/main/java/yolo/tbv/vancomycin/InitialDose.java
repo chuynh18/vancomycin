@@ -55,6 +55,7 @@ public class InitialDose extends AppCompatActivity {
         CNS_Input = findViewById(R.id.ID_CNS_Input);
         Dosing = findViewById(R.id.ID_dosing_result);
 
+        // set Event Listeners on input fields to hide dosage info (so user never sees out of date dosage)
         List<android.widget.EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
 
         for (int i = 0; i < inputs.size(); i++) {
@@ -107,6 +108,7 @@ public class InitialDose extends AppCompatActivity {
     public void calculateButtonPressed(View view) {
         Boolean inputIsValid = true;
 
+        // highlight inputs in red if missing
         List<EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
         for (int i = 0; i < inputs.size(); i++) {
             String inputString = inputs.get(i).getText().toString();
@@ -116,6 +118,7 @@ public class InitialDose extends AppCompatActivity {
             }
         }
 
+        // set error if user forgets to select Female/Male
         long sexID = SexInput.getSelectedItemId();
         System.out.println("SexID: " + sexID);
         if (sexID == 0) {
@@ -123,10 +126,13 @@ public class InitialDose extends AppCompatActivity {
             inputIsValid = false;
         }
 
+        // terminate execution if input is not valid
         if (!inputIsValid) {
+            System.out.println("Inputs are NOT valid");
             return;
         }
 
+        // grab values from user inputs
         double sexCalculateObeseClvan = (double) sexID - 1;
         double age = Double.parseDouble(AgeInput.getText().toString());
         double scr = Double.parseDouble(SCrInput.getText().toString());
@@ -134,30 +140,27 @@ public class InitialDose extends AppCompatActivity {
         double targetAUC = Double.parseDouble(AUCInput.getText().toString());
         isObese = ObeseInput.isChecked();
 
+        // input is valid, so reset hint styling (change font color back to gray from red)
         resetHints();
 
-        if (inputIsValid) {
-            System.out.println("Inputs are valid");
-            Dosing.setVisibility(View.VISIBLE);
+        System.out.println("Inputs are valid");
+        Dosing.setVisibility(View.VISIBLE);
 
-            double Ke = calculateKe();
-            double halfLife = calculateHL(Ke);
-            double Vd = calculateVd(bodyWeight);
-            double clvanGeneral = calculateClvanGeneral(Ke, Vd);
-            double clvanObese = calculateClvanObese(age, scr, sexCalculateObeseClvan, bodyWeight);
-            double finalClvan = calculateCappedClvanFinal(isObese, clvanGeneral, clvanObese);
-            double estimatedDailyDose = calculateEDDFinal(finalClvan, targetAUC);
-            int alternate15 = calculateObese((int) bodyWeight, 15);
-            int alternate20 = calculateObese((int) bodyWeight, 20);
-            int alternate25 = calculateObese((int) bodyWeight, 25);
-            int alternate30 = calculateObese((int) bodyWeight, 30);
+        double Ke = calculateKe();
+        double halfLife = calculateHL(Ke);
+        double Vd = calculateVd(bodyWeight);
+        double clvanGeneral = calculateClvanGeneral(Ke, Vd);
+        double clvanObese = calculateClvanObese(age, scr, sexCalculateObeseClvan, bodyWeight);
+        double finalClvan = calculateCappedClvanFinal(isObese, clvanGeneral, clvanObese);
+        double estimatedDailyDose = calculateEDDFinal(finalClvan, targetAUC);
+        int alternate15 = calculateObese((int) bodyWeight, 15);
+        int alternate20 = calculateObese((int) bodyWeight, 20);
+        int alternate25 = calculateObese((int) bodyWeight, 25);
+        int alternate30 = calculateObese((int) bodyWeight, 30);
 
-            // show results
-            displayCalculatedDose(view, isObese, estimatedDailyDose, alternate15, alternate20, alternate25, alternate30);
-            displayCalculatedValues(view, Ke, halfLife, Vd, finalClvan);
-        } else {
-            System.out.println("Inputs are NOT valid");
-        }
+        // show results
+        displayCalculatedDose(view, isObese, estimatedDailyDose, alternate15, alternate20, alternate25, alternate30);
+        displayCalculatedValues(view, Ke, halfLife, Vd, finalClvan);
     }
 
     // reset hint color to gray helper method

@@ -6,7 +6,7 @@
     density="560dpi"
     format="10"
     plugin-version="3.3.2"
-    timestamp="1552638665434"
+    timestamp="1552640194321"
     token="9032386309425966886"
     verifier="COMPATIBLE" >
 
@@ -73,15 +73,6 @@
     </build>
     <build
         build-mode="COLD"
-        ir-eligibility="R_CLASS_CHANGE"
-        timestamp="1552635299052"
-        verifier="COLD_SWAP_REQUESTED" >
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
-            type="SPLIT_MAIN" />
-    </build>
-    <build
-        build-mode="COLD"
         timestamp="1552638223235"
         verifier="R_CLASS_CHANGE" >
         <artifact
@@ -106,9 +97,6 @@
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
             type="SPLIT" />
         <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
-            type="SPLIT" />
-        <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
             type="SPLIT" />
         <artifact
@@ -116,8 +104,27 @@
             type="SPLIT" />
     </build>
     <build
+        build-mode="COLD"
+        timestamp="1552640045973"
+        verifier="COLD_SWAP_REQUESTED" >
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
+            type="SPLIT_MAIN" />
+    </build>
+    <build
         build-mode="HOT_WARM"
-        timestamp="1552638665434"
+        timestamp="1552640184548"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\builds\debug\1552640184548\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        build-mode="HOT_WARM"
+        timestamp="1552640194321"
         verifier="COMPATIBLE" >
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
