@@ -14,13 +14,14 @@ import java.util.List;
 
 public class InitialDose extends AppCompatActivity {
     android.widget.EditText AUCInput;
-    android.widget.EditText CrCLInput;
+    android.widget.EditText CrClInput;
     android.widget.EditText WeightInput;
     android.widget.EditText AgeInput;
     android.widget.EditText SCrInput;
     android.widget.Spinner SexInput;
     android.widget.CheckBox ObeseInput;
     android.widget.CheckBox CNS_Input;
+    android.widget.TextView AUC_Result;
     boolean isObese;
 
     // holds onto original value of AUC24, used by CNS_Input.setOnClickListener() in onCreate()
@@ -42,13 +43,14 @@ public class InitialDose extends AppCompatActivity {
 
         // assign class variables their proper values
         AUCInput = findViewById(R.id.ID_AUC_Input);
-        CrCLInput = findViewById(R.id.ID_CrCL_Input);
+        CrClInput = findViewById(R.id.ID_CrCl_Input);
         WeightInput = findViewById(R.id.ID_BodyWeight_Input);
         AgeInput = findViewById(R.id.ID_Age_Input);
         SCrInput = findViewById(R.id.ID_SCr_Input);
         SexInput = findViewById(R.id.ID_Sex_Input);
         ObeseInput = findViewById(R.id.ID_Obese_Input);
         CNS_Input = findViewById(R.id.ID_CNS_Input);
+        AUC_Result = findViewById(R.id.ID_AUC_Dosing_result);
 
         CNS_Input.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +81,7 @@ public class InitialDose extends AppCompatActivity {
 
         Boolean inputIsValid = true;
 
-        List<EditText> inputs = Arrays.asList(AUCInput, CrCLInput, WeightInput, AgeInput, SCrInput);
+        List<EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
         for (int i = 0; i < inputs.size(); i++) {
             String inputString = inputs.get(i).getText().toString();
             if (inputString.length() == 0) {
@@ -104,6 +106,13 @@ public class InitialDose extends AppCompatActivity {
             double clvanObese = calculateClvanObese(age, scr, sexCalculateObeseClvan, bodyWeight);
             double finalClvan = calculateCappedClvanFinal(isObese, clvanGeneral, clvanObese);
             double estimatedDailyDose = calculateEDDFinal(finalClvan, targetAUC);
+            int alternate15 = calculateObese((int) bodyWeight, 15);
+            int alternate20 = calculateObese((int) bodyWeight, 20);
+            int alternate25 = calculateObese((int) bodyWeight, 25);
+            int alternate30 = calculateObese((int) bodyWeight, 30);
+
+            // show results
+            displayCalculatedDose(view, estimatedDailyDose);
         } else {
             System.out.println("Inputs are NOT valid");
         }
@@ -111,27 +120,27 @@ public class InitialDose extends AppCompatActivity {
 
     // reset hint color to gray helper method
     private void resetHints() {
-        List<EditText> inputs = Arrays.asList(AUCInput, CrCLInput, WeightInput, AgeInput, SCrInput);
+        List<EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
 
         for (int i = 0; i < inputs.size(); i++) {
             inputs.get(i).setHintTextColor(Color.GRAY);
         }
     }
 
-    // Calculate max CrCL (if userInput over 150, CrCL is 150, else go with userInput)
-    private double calculateCrCL(double inputCrCL) {
-        if (inputCrCL > 150) {
+    // Calculate max CrCL (if userInput over 150, CrCl is 150, else go with userInput)
+    private double calculateCrCl(double inputCrCl) {
+        if (inputCrCl > 150) {
             return 150;
         }
 
-        return inputCrCL;
+        return inputCrCl;
     }
 
     // Ke is 0.00083*actualCrCL + 0.0044
     public double calculateKe() {
-        double inputCrCL = Double.parseDouble(CrCLInput.getText().toString());
-        double actualCrCL = calculateCrCL(inputCrCL);
-        double Ke = 0.00083*actualCrCL+0.0044;
+        double inputCrCl = Double.parseDouble(CrClInput.getText().toString());
+        double actualCrCl = calculateCrCl(inputCrCl);
+        double Ke = 0.00083*actualCrCl+0.0044;
 
         System.out.println("Ke: " + Ke);
         return Ke;
@@ -182,13 +191,23 @@ public class InitialDose extends AppCompatActivity {
 
     public double calculateEDDFinal(double clvancoFinal, double targetAUC) {
         double calculatedEDD = clvancoFinal * targetAUC;
+        System.out.println("calculated EDD: " + calculatedEDD);
 
         if (calculatedEDD > 4500) {
+            System.out.println("recalculated EDD: capped at 4500");
             return 4500;
         }
 
-        System.out.println("calculated EDD: " + calculatedEDD);
         return calculatedEDD;
+    }
+
+    public int calculateObese(int bodyWeight, int mgkg) {
+        return mgkg*bodyWeight;
+    }
+
+    public void displayCalculatedDose(View view, double aucResult) {
+        String aucString = Double.toString(aucResult);
+        AUC_Result.setText(aucString);
     }
 }
 

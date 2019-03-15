@@ -7,8 +7,8 @@
     <string name="input_patient_data_to_estimate_initial_auc_targeted_dosing_regimen">Input patient data to estimate initial AUC-targeted dosing regimen</string>
     <string name="chosen_goal_auc24">Chosen Goal AUC24</string>
     <string name="input_goal">Input goal</string>
-    <string name="crcl_ml_min">CrCL (ml/min)</string>
-    <string name="input_crcl">Input CrCL</string>
+    <string name="crcl_ml_min">CrCl (ml/min)</string>
+    <string name="input_crcl">Input CrCl</string>
     <string name="total_body_weight_kg">Total body weight (kg)</string>
     <string name="input_weight_in_kg">Input weight in kg</string>
     <string name="age">Age</string>
@@ -20,4 +20,5 @@
     <string name="cns_infection">CNS infection</string>
     <string name="calculate_dose">Calculate dose</string>
     <string name="adjusts_goal_auc_to_600">Adjusts goal AUC to 600</string>
+    <string name="estimated_initial_dose">Estimated initial dose</string>
 </resources>
