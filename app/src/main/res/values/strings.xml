@@ -21,4 +21,7 @@
     <string name="calculate_dose">Calculate dose</string>
     <string name="adjusts_goal_auc_to_600">Adjusts goal AUC to 600</string>
     <string name="estimated_initial_dose">Estimated initial dose</string>
+    <string name="auc_based_dosing">AUC-based dosing</string>
+    <string name="_400">400</string>
+    <string name="auc_value">AUC value</string>
 </resources>
