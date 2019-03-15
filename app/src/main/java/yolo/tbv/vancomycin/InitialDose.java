@@ -8,6 +8,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.SubscriptSpan;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 import java.util.Arrays;
@@ -22,6 +23,7 @@ public class InitialDose extends AppCompatActivity {
     android.widget.Spinner SexInput;
     android.widget.CheckBox ObeseInput;
     android.widget.CheckBox CNS_Input;
+    ConstraintLayout Dosing;
 
     boolean isObese;
 
@@ -51,10 +53,44 @@ public class InitialDose extends AppCompatActivity {
         SexInput = findViewById(R.id.ID_Sex_Input);
         ObeseInput = findViewById(R.id.ID_Obese_Input);
         CNS_Input = findViewById(R.id.ID_CNS_Input);
+        Dosing = findViewById(R.id.ID_dosing_result);
+
+        List<android.widget.EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
+
+        for (int i = 0; i < inputs.size(); i++) {
+            inputs.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Dosing.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        SexInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView adapter, View view, int i, long lng) {
+                Dosing.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
+                Dosing.setVisibility(View.GONE);
+            }
+        });
+
+        ObeseInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dosing.setVisibility(View.GONE);
+            }
+        });
 
         CNS_Input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Dosing.setVisibility(View.GONE);
+
                 if (CNS_Input.isChecked()) {
                     System.out.println("Checked");
                     CNSOriginalValue = AUCInput.getText().toString();
@@ -69,16 +105,6 @@ public class InitialDose extends AppCompatActivity {
 
     // button press onClick method
     public void calculateButtonPressed(View view) {
-        long sexID = SexInput.getSelectedItemId();
-        double sexCalculateObeseClvan = (double) sexID - 1;
-        double age = Double.parseDouble(AgeInput.getText().toString());
-        double scr = Double.parseDouble(SCrInput.getText().toString());
-        double bodyWeight = Double.parseDouble(WeightInput.getText().toString());
-        double targetAUC = Double.parseDouble(AUCInput.getText().toString());
-        isObese = ObeseInput.isChecked();
-
-        resetHints();
-
         Boolean inputIsValid = true;
 
         List<EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
@@ -90,15 +116,30 @@ public class InitialDose extends AppCompatActivity {
             }
         }
 
-
+        long sexID = SexInput.getSelectedItemId();
         System.out.println("SexID: " + sexID);
         if (sexID == 0) {
             ((TextView) SexInput.getSelectedView()).setError("Select Male or Female");
             inputIsValid = false;
         }
 
+        if (!inputIsValid) {
+            return;
+        }
+
+        double sexCalculateObeseClvan = (double) sexID - 1;
+        double age = Double.parseDouble(AgeInput.getText().toString());
+        double scr = Double.parseDouble(SCrInput.getText().toString());
+        double bodyWeight = Double.parseDouble(WeightInput.getText().toString());
+        double targetAUC = Double.parseDouble(AUCInput.getText().toString());
+        isObese = ObeseInput.isChecked();
+
+        resetHints();
+
         if (inputIsValid) {
             System.out.println("Inputs are valid");
+            Dosing.setVisibility(View.VISIBLE);
+
             double Ke = calculateKe();
             double halfLife = calculateHL(Ke);
             double Vd = calculateVd(bodyWeight);
@@ -113,6 +154,7 @@ public class InitialDose extends AppCompatActivity {
 
             // show results
             displayCalculatedDose(view, isObese, estimatedDailyDose, alternate15, alternate20, alternate25, alternate30);
+            displayCalculatedValues(view, Ke, halfLife, Vd, finalClvan);
         } else {
             System.out.println("Inputs are NOT valid");
         }
@@ -230,6 +272,18 @@ public class InitialDose extends AppCompatActivity {
         } else {
             Obesity_dosing.setVisibility(View.GONE);
         }
+    }
+
+    public void displayCalculatedValues(View view, double ke, double halfLife, double vd, double clvanco) {
+        android.widget.TextView Ke = findViewById(R.id.ID_ke_value);
+        android.widget.TextView Hl = findViewById(R.id.ID_halflife_value);
+        android.widget.TextView Vd = findViewById(R.id.ID_Vd_value);
+        android.widget.TextView Clvanco = findViewById(R.id.ID_clvanco_value);
+
+        Ke.setText(Double.toString(ke));
+        Hl.setText(Double.toString(halfLife));
+        Vd.setText(Double.toString(vd));
+        Clvanco.setText(Double.toString(clvanco));
     }
 }
 

@@ -25,7 +25,7 @@
     <string name="_400">400</string>
     <string name="auc_value">AUC value</string>
     <string name="weight_based_obesity_dosing_crcl_50_alternative_dosing"><![CDATA[Weight-based obesity dosing (CrCl > 50, alternative dosing)]]></string>
-    <string name="estimated_daily_dose_bmi_between_30_and_39_9">Estimated daily dose (BMI between 30 and 39.9)</string>
+    <string name="estimated_daily_dose_bmi_between_30_and_39_9">Estimated daily dose (BMI from 30 to 39.9)</string>
     <string name="estimated_daily_dose_bmi_40_and_above">Estimated daily dose (BMI 40 and above)</string>
     <string name="_25_mg_kg_d">25 mg/kg/d</string>
     <string name="_30_mg_kg_d_upper_limit">30 mg/kg/d (upper limit)</string>
@@ -39,4 +39,13 @@
     <string name="_40_25">40-25</string>
     <string name="_20_mg_kg_d">20 mg/kg/d</string>
     <string name="_20_mg_kg_d_30bmi">20 mg/kg/d</string>
+    <string name="calculated_values">Calculated values</string>
+    <string name="ke_label">computed ke</string>
+    <string name="calculated_ke_label">ke</string>
+    <string name="calculated_half_life_label">Half-life</string>
+    <string name="computed_half_life">computed half-life</string>
+    <string name="calculated_vd_label">Vd</string>
+    <string name="computed_vd">computed Vd</string>
+    <string name="calculated_clvanco_l_hr_label">Clvanco (L/hr)</string>
+    <string name="computed_clvanco">computed Clvanco</string>
 </resources>
