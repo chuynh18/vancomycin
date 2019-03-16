@@ -2,13 +2,13 @@
 <instant-run
     abi="x86"
     api-level="28"
-    build-mode="COLD"
+    build-mode="HOT_WARM"
     density="560dpi"
     format="10"
     plugin-version="3.3.2"
-    timestamp="1552644867747"
+    timestamp="1552758214428"
     token="9032386309425966886"
-    verifier="COLD_SWAP_REQUESTED" >
+    verifier="COMPATIBLE" >
 
     <task
         name="javac"
@@ -29,8 +29,17 @@
 
     <build
         build-mode="FULL"
-        timestamp="1552644009373"
+        timestamp="1552757788889"
         verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
+            type="SPLIT_MAIN" />
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
             type="SPLIT" />
@@ -50,9 +59,6 @@
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
             type="SPLIT" />
         <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
-            type="SPLIT" />
-        <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
             type="SPLIT" />
         <artifact
@@ -62,55 +68,21 @@
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
             type="SPLIT" />
         <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
-            type="SPLIT" />
-        <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
             type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
-            type="SPLIT_MAIN" />
     </build>
     <build
         build-mode="COLD"
-        ir-eligibility="R_CLASS_CHANGE"
-        timestamp="1552644606668"
-        verifier="COLD_SWAP_REQUESTED" >
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
-            type="SPLIT" />
+        timestamp="1552758151966"
+        verifier="METHOD_DELETED" >
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
             type="SPLIT" />
     </build>
     <build
-        build-mode="COLD"
-        timestamp="1552644867747"
-        verifier="COLD_SWAP_REQUESTED" >
+        build-mode="HOT_WARM"
+        timestamp="1552758214428"
+        verifier="COMPATIBLE" >
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
             type="SPLIT" />
