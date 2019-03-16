@@ -6,22 +6,22 @@
     density="560dpi"
     format="10"
     plugin-version="3.3.2"
-    timestamp="1552759404929"
+    timestamp="1552760222195"
     token="9032386309425966886"
     verifier="COMPATIBLE" >
 
     <task
         name="javac"
-        duration="135" />
+        duration="105" />
     <task
         name="instant-run-dex"
         duration="15" />
     <task
         name="instant-run-transform"
-        duration="31" />
+        duration="26" />
     <task
         name="verifier"
-        duration="2" />
+        duration="6" />
 
     <artifact
         location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\reload-dex\debug\classes.dex"
@@ -73,15 +73,26 @@
     </build>
     <build
         build-mode="COLD"
-        timestamp="1552758769123"
-        verifier="METHOD_DELETED" >
+        timestamp="1552759984608"
+        verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
             type="SPLIT" />
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
+            type="SPLIT_MAIN" />
     </build>
     <build
         build-mode="HOT_WARM"
-        timestamp="1552759404929"
+        timestamp="1552760082433"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\builds\debug\1552760082433\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        build-mode="HOT_WARM"
+        timestamp="1552760222195"
         verifier="COMPATIBLE" >
         <artifact
             location="C:\AndroidStudio\projects\Vancomycin\app\build\intermediates\reload-dex\debug\classes.dex"

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class InitialDose extends AppCompatActivity {
     private android.widget.EditText AUCInput;
@@ -182,18 +183,17 @@ public class InitialDose extends AppCompatActivity {
         android.widget.TextView Obese_4020 = findViewById(R.id.ID_Obese_40_20);
         android.widget.TextView Obese_4025 = findViewById(R.id.ID_Obese_40_25);
 
-        String aucString = Double.toString(aucResult);
-        AUC_Result.setText(aucString);
+        AUC_Result.setText(String.format(Locale.getDefault(),"%f", aucResult));
 
         if (isObese) {
             Obesity_dosing.setVisibility(View.VISIBLE);
 
-            Obese_3020.setText(Double.toString(alt20));
-            Obese_3025.setText(Double.toString(alt25));
-            Obese_3030.setText(Double.toString(alt30));
-            Obese_4015.setText(Double.toString(alt15));
-            Obese_4020.setText(Double.toString(alt20));
-            Obese_4025.setText(Double.toString(alt25));
+            Obese_3020.setText(String.format(Locale.getDefault(),"%f", alt20));
+            Obese_3025.setText(String.format(Locale.getDefault(),"%f", alt25));
+            Obese_3030.setText(String.format(Locale.getDefault(),"%f", alt30));
+            Obese_4015.setText(String.format(Locale.getDefault(),"%f", alt15));
+            Obese_4020.setText(String.format(Locale.getDefault(),"%f", alt20));
+            Obese_4025.setText(String.format(Locale.getDefault(),"%f", alt25));
         } else {
             Obesity_dosing.setVisibility(View.GONE);
         }
@@ -205,9 +205,9 @@ public class InitialDose extends AppCompatActivity {
         android.widget.TextView Vd = findViewById(R.id.ID_Vd_value);
         android.widget.TextView Clvanco = findViewById(R.id.ID_clvanco_value);
 
-        Ke.setText(Double.toString(ke));
-        Hl.setText(Double.toString(halfLife));
-        Vd.setText(Double.toString(vd));
-        Clvanco.setText(Double.toString(clvanco));
+        Ke.setText(String.format(Locale.getDefault(),"%f", ke));
+        Hl.setText(String.format(Locale.getDefault(),"%f", halfLife));
+        Vd.setText(String.format(Locale.getDefault(),"%f", vd));
+        Clvanco.setText(String.format(Locale.getDefault(),"%f", clvanco));
     }
 }
