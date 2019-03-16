@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
-import yolo.tbv.vancomycin.DoseCalculator;
 
 public class InitialDose extends AppCompatActivity {
     private android.widget.EditText AUCInput;
@@ -154,10 +153,10 @@ public class InitialDose extends AppCompatActivity {
         double clvanObese = DoseCalculator.calculateClvanObese(age, scr, sexCalculateObeseClvan, bodyWeight);
         double finalClvan = DoseCalculator.calculateCappedClvanFinal(isObese, clvanGeneral, clvanObese);
         double estimatedDailyDose = DoseCalculator.calculateEDDFinal(finalClvan, targetAUC);
-        double alternate15 = DoseCalculator.calculateObese((int) bodyWeight, 15);
-        double alternate20 = DoseCalculator.calculateObese((int) bodyWeight, 20);
-        double alternate25 = DoseCalculator.calculateObese((int) bodyWeight, 25);
-        double alternate30 = DoseCalculator.calculateObese((int) bodyWeight, 30);
+        double alternate15 = DoseCalculator.calculateObese(bodyWeight, 15);
+        double alternate20 = DoseCalculator.calculateObese(bodyWeight, 20);
+        double alternate25 = DoseCalculator.calculateObese(bodyWeight, 25);
+        double alternate30 = DoseCalculator.calculateObese(bodyWeight, 30);
 
         // show results
         displayCalculatedDose(view, isObese, estimatedDailyDose, alternate15, alternate20, alternate25, alternate30);
@@ -212,4 +211,3 @@ public class InitialDose extends AppCompatActivity {
         Clvanco.setText(Double.toString(clvanco));
     }
 }
-

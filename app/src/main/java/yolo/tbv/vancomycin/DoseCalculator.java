@@ -74,7 +74,7 @@ public final class DoseCalculator {
         return calculatedEDD;
     }
 
-    public static double calculateObese(double bodyWeight, int mgkg) {
+    public static double calculateObese(double bodyWeight, double mgkg) {
         return mgkg*bodyWeight;
     }
 
