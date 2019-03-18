@@ -26,7 +26,7 @@ public class InitialDose extends AppCompatActivity {
     private android.widget.CheckBox CNS_Input;
     private ConstraintLayout Dosing;
 
-    boolean isObese;
+    private boolean isObese;
 
     // holds onto original value of AUC24, used by CNS_Input.setOnClickListener() in onCreate()
     String CNSOriginalValue;
@@ -105,9 +105,9 @@ public class InitialDose extends AppCompatActivity {
         });
     }
 
-    // button press onClick method
-    public void calculateButtonPressed(View view) {
-        Boolean inputIsValid = true;
+    // checks that user inputs exist; warns user if input is missing
+    private boolean validateUserInput(long sexID) {
+        boolean inputIsValid = true;
 
         // highlight inputs in red if missing
         List<EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
@@ -120,7 +120,6 @@ public class InitialDose extends AppCompatActivity {
         }
 
         // set error if user forgets to select Female/Male
-        long sexID = SexInput.getSelectedItemId();
         System.out.println("SexID: " + sexID);
         if (sexID == 0) {
             ((TextView) SexInput.getSelectedView()).setError("Select Male or Female");
@@ -130,6 +129,17 @@ public class InitialDose extends AppCompatActivity {
         // terminate execution if input is not valid
         if (!inputIsValid) {
             System.out.println("Inputs are NOT valid");
+        }
+
+        return inputIsValid;
+    }
+
+    // button press onClick method
+    public void calculateButtonPressed(View view) {
+        long sexID = SexInput.getSelectedItemId();
+
+        // terminate execution if user input is missing
+        if (!validateUserInput(sexID)) {
             return;
         }
 
@@ -143,9 +153,7 @@ public class InitialDose extends AppCompatActivity {
 
         // input is valid, so reset hint styling (change font color back to gray from red)
         resetHints();
-
         System.out.println("Inputs are valid");
-        Dosing.setVisibility(View.VISIBLE);
 
         double Ke = DoseCalculator.calculateKe(Double.parseDouble(CrClInput.getText().toString()));
         double halfLife = DoseCalculator.calculateHL(Ke);
@@ -160,6 +168,7 @@ public class InitialDose extends AppCompatActivity {
         double alternate30 = DoseCalculator.calculateObese(bodyWeight, 30);
 
         // show results
+        Dosing.setVisibility(View.VISIBLE);
         displayCalculatedDose(view, isObese, estimatedDailyDose, alternate15, alternate20, alternate25, alternate30);
         displayCalculatedValues(view, Ke, halfLife, Vd, finalClvan);
     }

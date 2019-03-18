@@ -58,7 +58,7 @@ public final class DoseCalculator {
             return 9;
         }
 
-        System.out.println("clvan final: " + clvanFinal);
+        System.out.println("Clvan final: " + clvanFinal);
         return clvanFinal;
     }
 
@@ -77,5 +77,4 @@ public final class DoseCalculator {
     public static double calculateObese(double bodyWeight, double mgkg) {
         return mgkg*bodyWeight;
     }
-
 }
