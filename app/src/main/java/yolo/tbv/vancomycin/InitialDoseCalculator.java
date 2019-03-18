@@ -1,6 +1,6 @@
 package yolo.tbv.vancomycin;
 
-public final class DoseCalculator {
+public final class InitialDoseCalculator {
     // Calculate max CrCL (if userInput over 150, CrCl is 150, else go with userInput)
     private static double calculateCrCl(double inputCrCl) {
         if (inputCrCl > 150) {

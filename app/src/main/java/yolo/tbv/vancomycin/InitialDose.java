@@ -155,17 +155,17 @@ public class InitialDose extends AppCompatActivity {
         resetHints();
         System.out.println("Inputs are valid");
 
-        double Ke = DoseCalculator.calculateKe(Double.parseDouble(CrClInput.getText().toString()));
-        double halfLife = DoseCalculator.calculateHL(Ke);
-        double Vd = DoseCalculator.calculateVd(bodyWeight);
-        double clvanGeneral = DoseCalculator.calculateClvanGeneral(Ke, Vd);
-        double clvanObese = DoseCalculator.calculateClvanObese(age, scr, sexCalculateObeseClvan, bodyWeight);
-        double finalClvan = DoseCalculator.calculateCappedClvanFinal(isObese, clvanGeneral, clvanObese);
-        double estimatedDailyDose = DoseCalculator.calculateEDDFinal(finalClvan, targetAUC);
-        double alternate15 = DoseCalculator.calculateObese(bodyWeight, 15);
-        double alternate20 = DoseCalculator.calculateObese(bodyWeight, 20);
-        double alternate25 = DoseCalculator.calculateObese(bodyWeight, 25);
-        double alternate30 = DoseCalculator.calculateObese(bodyWeight, 30);
+        double Ke = InitialDoseCalculator.calculateKe(Double.parseDouble(CrClInput.getText().toString()));
+        double halfLife = InitialDoseCalculator.calculateHL(Ke);
+        double Vd = InitialDoseCalculator.calculateVd(bodyWeight);
+        double clvanGeneral = InitialDoseCalculator.calculateClvanGeneral(Ke, Vd);
+        double clvanObese = InitialDoseCalculator.calculateClvanObese(age, scr, sexCalculateObeseClvan, bodyWeight);
+        double finalClvan = InitialDoseCalculator.calculateCappedClvanFinal(isObese, clvanGeneral, clvanObese);
+        double estimatedDailyDose = InitialDoseCalculator.calculateEDDFinal(finalClvan, targetAUC);
+        double alternate15 = InitialDoseCalculator.calculateObese(bodyWeight, 15);
+        double alternate20 = InitialDoseCalculator.calculateObese(bodyWeight, 20);
+        double alternate25 = InitialDoseCalculator.calculateObese(bodyWeight, 25);
+        double alternate30 = InitialDoseCalculator.calculateObese(bodyWeight, 30);
 
         // show results
         Dosing.setVisibility(View.VISIBLE);
