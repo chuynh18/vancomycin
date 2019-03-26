@@ -64,4 +64,5 @@
     <string name="auc_input_date">Input date</string>
     <string name="auc_time_of_preceeding_dose">Time of preceding dose</string>
     <string name="auc_input_time">Input time</string>
+    <string name="AUC_preceding_dose_label">Preceding dose</string>
 </resources>

@@ -63,4 +63,6 @@ public class TimePickerFragment extends DialogFragment
     public int getChosenMinute() {
         return this.chosenMinute;
     }
+
+    public boolean userDidChooseTime() { return this.userSelectedTime; }
 }

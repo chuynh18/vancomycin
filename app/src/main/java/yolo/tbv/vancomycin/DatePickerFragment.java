@@ -69,4 +69,6 @@ public class DatePickerFragment extends DialogFragment
     public int getChosenDay() {
         return this.chosenDay;
     }
+
+    public boolean userDidChooseDate() { return this.userSelectedDate; }
 }

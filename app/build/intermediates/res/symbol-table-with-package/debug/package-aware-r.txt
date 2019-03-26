@@ -1120,12 +1120,12 @@ id constraintLayout15
 id constraintLayout16
 id constraintLayout17
 id constraintLayout18
-id constraintLayout19
 id constraintLayout2
 id constraintLayout20
 id constraintLayout21
 id constraintLayout22
 id constraintLayout23
+id constraintLayout24
 id constraintLayout3
 id constraintLayout4
 id constraintLayout5
@@ -1182,6 +1182,8 @@ id item_touch_helper_previous_elevation
 id labeled
 id largeLabel
 id left
+id level_1_date_button
+id level_1_time_button
 id line1
 id line3
 id listMode
@@ -1287,6 +1289,10 @@ id textView20
 id textView21
 id textView22
 id textView23
+id textView24
+id textView25
+id textView26
+id textView27
 id textView3
 id textView4
 id textView5
@@ -1398,6 +1404,7 @@ layout support_simple_spinner_dropdown_item
 menu navigation
 mipmap ic_launcher
 mipmap ic_launcher_round
+string AUC_preceding_dose_label
 string _15_mg_kg_d
 string _20_mg_kg_d
 string _20_mg_kg_d_30bmi
