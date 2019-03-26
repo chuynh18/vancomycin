@@ -49,4 +49,19 @@
     <string name="calculated_clvanco_l_hr_label">Clvanco (L/hr)</string>
     <string name="computed_clvanco">computed Clvanco</string>
     <string name="initial_dose_navbar">Initial dose</string>
+    <string name="calculate_auc_dose">Calculate AUC dose</string>
+    <string name="input_initial_dose_measured_peak_and_measured_trough_to_estimate_auc">Input initial dose, measured peak, and measured trough to estimate AUC</string>
+    <string name="auc_initial_dose_mg">Initial dose (mg)</string>
+    <string name="auc_initial_dosing_frequency_hr">Initial dosing frequency (hr)</string>
+    <string name="auc_input_initial_dose_freq">Input initial dose freq</string>
+    <string name="auc_input_initial_dose">Input initial dose</string>
+    <string name="auc_infusion_duration_hr">Infusion duration (hr)</string>
+    <string name="auc_input_duration">Input duration</string>
+    <string name="auc_initial_dosing_title">Initial dosing</string>
+    <string name="auc_assessment">AUC assessment</string>
+    <string name="auc_based_on_paired_levels_drawn_after_a_dose">Based on paired levels drawn after a dose</string>
+    <string name="auc_date_of_preceeding_dose">Date of preceding dose</string>
+    <string name="auc_input_date">Input date</string>
+    <string name="auc_time_of_preceeding_dose">Time of preceding dose</string>
+    <string name="auc_input_time">Input time</string>
 </resources>

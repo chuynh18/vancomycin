@@ -24,14 +24,13 @@ public class InitialDose extends AppCompatActivity {
     private android.widget.Spinner SexInput;
     private android.widget.CheckBox ObeseInput;
     private android.widget.CheckBox CNS_Input;
-    private ConstraintLayout Dosing;
-
-    private boolean isObese;
+    private ConstraintLayout DosingView;
 
     // holds onto original value of AUC24, used by CNS_Input.setOnClickListener() in onCreate()
     String CNSOriginalValue;
 
-    private void updateAUC() {
+    // All this method does is make the "24" in "AUC24" subscript.  That's it.  Really.
+    private void setAUC24Subscript() {
         android.widget.TextView auc24 = findViewById(R.id.ID_AUC);
         SpannableStringBuilder aucSB = new SpannableStringBuilder(getString(R.string.chosen_goal_auc24));
         aucSB.setSpan(new SubscriptSpan(), 15, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -43,7 +42,7 @@ public class InitialDose extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_dose);
 
-        updateAUC();
+        this.setAUC24Subscript();
 
         // assign class variables their proper values
         AUCInput = findViewById(R.id.ID_AUC_Input);
@@ -54,7 +53,7 @@ public class InitialDose extends AppCompatActivity {
         SexInput = findViewById(R.id.ID_Sex_Input);
         ObeseInput = findViewById(R.id.ID_Obese_Input);
         CNS_Input = findViewById(R.id.ID_CNS_Input);
-        Dosing = findViewById(R.id.ID_dosing_result);
+        DosingView = findViewById(R.id.ID_dosing_result);
 
         // set Event Listeners on input fields to hide dosage info (so user never sees out of date dosage)
         List<android.widget.EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
@@ -63,7 +62,7 @@ public class InitialDose extends AppCompatActivity {
             inputs.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Dosing.setVisibility(View.GONE);
+                    DosingView.setVisibility(View.GONE);
                 }
             });
         }
@@ -71,27 +70,27 @@ public class InitialDose extends AppCompatActivity {
         SexInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView adapter, View view, int i, long lng) {
-                Dosing.setVisibility(View.GONE);
+                DosingView.setVisibility(View.GONE);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView)
             {
-                Dosing.setVisibility(View.GONE);
+                DosingView.setVisibility(View.GONE);
             }
         });
 
         ObeseInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dosing.setVisibility(View.GONE);
+                DosingView.setVisibility(View.GONE);
             }
         });
 
         CNS_Input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dosing.setVisibility(View.GONE);
+                DosingView.setVisibility(View.GONE);
 
                 if (CNS_Input.isChecked()) {
                     System.out.println("Checked");
@@ -139,7 +138,7 @@ public class InitialDose extends AppCompatActivity {
         long sexID = SexInput.getSelectedItemId();
 
         // terminate execution if user input is missing
-        if (!validateUserInput(sexID)) {
+        if (!this.validateUserInput(sexID)) {
             return;
         }
 
@@ -149,12 +148,13 @@ public class InitialDose extends AppCompatActivity {
         double scr = Double.parseDouble(SCrInput.getText().toString());
         double bodyWeight = Double.parseDouble(WeightInput.getText().toString());
         double targetAUC = Double.parseDouble(AUCInput.getText().toString());
-        isObese = ObeseInput.isChecked();
+        boolean isObese = ObeseInput.isChecked();
 
         // input is valid, so reset hint styling (change font color back to gray from red)
-        resetHints();
+        this.resetHints();
         System.out.println("Inputs are valid");
 
+        // actually do the math by calling appropriate methods from InitialDoseCalculator
         double Ke = InitialDoseCalculator.calculateKe(Double.parseDouble(CrClInput.getText().toString()));
         double halfLife = InitialDoseCalculator.calculateHL(Ke);
         double Vd = InitialDoseCalculator.calculateVd(bodyWeight);
@@ -168,7 +168,7 @@ public class InitialDose extends AppCompatActivity {
         double alternate30 = InitialDoseCalculator.calculateObese(bodyWeight, 30);
 
         // show results
-        Dosing.setVisibility(View.VISIBLE);
+        DosingView.setVisibility(View.VISIBLE);
         displayCalculatedDose(view, isObese, estimatedDailyDose, alternate15, alternate20, alternate25, alternate30);
         displayCalculatedValues(view, Ke, halfLife, Vd, finalClvan);
     }
