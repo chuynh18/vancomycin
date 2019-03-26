@@ -1,4 +1,4 @@
-#Mon Mar 25 22:32:28 PDT 2019
+#Tue Mar 26 00:27:50 PDT 2019
 base.0=C\:\\Users\\fuckingmicrosoft\\Documents\\vancomycin\\Vancomycin\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\6
 path.0=classes.dex
 renamed.0=classes.dex
