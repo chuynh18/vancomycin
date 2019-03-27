@@ -9,7 +9,16 @@ import android.view.View;
 import android.widget.TextView;
 
 public class AUC extends AppCompatActivity {
+    // Variables that will hold onto various input fields
+    private android.widget.EditText initialDose;
+    private android.widget.EditText initialDoseFreq;
+    private android.widget.EditText infusionDuration;
+    private android.widget.EditText goalAUC24;
+    private android.widget.EditText chosenDoseRevision;
+    private android.widget.EditText chosenDoseIntervalRevision;
+    private android.widget.EditText chosenDoseInfusionDurationRevision;
 
+    // Date and time picker fragments
     DatePickerFragment precedingDoseDateFragment;
     TimePickerFragment precedingDoseTimeFragment;
 
@@ -89,5 +98,10 @@ public class AUC extends AppCompatActivity {
         SpannableStringBuilder aucSB = new SpannableStringBuilder(getString(R.string.chosen_goal_auc24));
         aucSB.setSpan(new SubscriptSpan(), 15, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         auc24.setText(aucSB, TextView.BufferType.SPANNABLE);
+
+        android.widget.TextView calcAuc = findViewById(R.id.AUC_calculated_AUC_label);
+        SpannableStringBuilder calcAucSB = new SpannableStringBuilder(getString(R.string.AUC_calculated_auc24));
+        calcAucSB.setSpan(new SubscriptSpan(), 14, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        calcAuc.setText(calcAucSB, TextView.BufferType.SPANNABLE);
     }
 }

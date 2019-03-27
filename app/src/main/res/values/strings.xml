@@ -42,7 +42,7 @@
     <string name="calculated_values">Calculated values</string>
     <string name="ke_label">computed ke</string>
     <string name="calculated_ke_label">ke</string>
-    <string name="calculated_half_life_label">Half-life</string>
+    <string name="calculated_half_life_label">Half-life (hr)</string>
     <string name="computed_half_life">computed half-life</string>
     <string name="calculated_vd_label">Vd</string>
     <string name="computed_vd">computed Vd</string>
@@ -56,7 +56,6 @@
     <string name="auc_input_initial_dose_freq">Input initial dose freq</string>
     <string name="auc_input_initial_dose">Input initial dose</string>
     <string name="auc_infusion_duration_hr">Infusion duration (hr)</string>
-    <string name="auc_input_duration">Input duration</string>
     <string name="auc_initial_dosing_title">Initial dosing</string>
     <string name="auc_assessment">AUC assessment</string>
     <string name="auc_based_on_paired_levels_drawn_after_a_dose">Based on paired levels drawn after a dose</string>
@@ -80,4 +79,23 @@
     <string name="AUC_infusion_duration_hr">Infusion duration (hr)</string>
     <string name="AUC_input_infusion_duration">Input infusion duration</string>
     <string name="AUC_calculate_dosing">Calculate dosing</string>
+    <string name="AUC_vd_l">Vd (L)</string>
+    <string name="AUC_computed_vd">computed Vd</string>
+    <string name="AUC_computed_ke">computed ke</string>
+    <string name="AUC_ke_hours_1">ke (hours - 1)</string>
+    <string name="AUC_true_peak">True peak</string>
+    <string name="AUC_computed_peak">computed peak</string>
+    <string name="AUC_true_trough">True trough</string>
+    <string name="AUC_computed_trough">computed trough</string>
+    <string name="AUC_estimated_auc">Estimated AUC</string>
+    <string name="AUC_computed_auc24">computed AUC24</string>
+    <string name="AUC_calculated_auc24">Calculated AUC24</string>
+    <string name="AUC_estimated_revised_dose">Estimated revised dose</string>
+    <string name="AUC_recommended_revised_dose_mg">Recommended revised dose (mg)</string>
+    <string name="AUC_computed_revised_dose">computed revised dose</string>
+    <string name="recomAUC_mended_revised_dosing_interval_hr">Recommended revised dosing interval (hr)</string>
+    <string name="AUC_computed_dosing_interval">computed dosing interval</string>
+    <string name="AUC_predicted_auc24_based_on_chosen_dose">Predicted AUC24 based on chosen dose</string>
+    <string name="AUC_predicted_trough_based_on_chosen_dose">Predicted trough based on chosen dose</string>
+    <string name="AUC_predicted_peak_based_on_chosen_dose">Predicted peak based on chosen dose</string>
 </resources>

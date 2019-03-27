@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class InitialDose extends AppCompatActivity {
+    // Variables that will hold onto various input fields
     private android.widget.EditText AUCInput;
     private android.widget.EditText CrClInput;
     private android.widget.EditText WeightInput;
