@@ -45,16 +45,16 @@ public class InitialDose extends AppCompatActivity {
 
         this.setAUC24Subscript();
 
-        // assign class variables their proper values
-        AUCInput = findViewById(R.id.ID_AUC_Input);
-        CrClInput = findViewById(R.id.ID_CrCl_Input);
-        WeightInput = findViewById(R.id.ID_BodyWeight_Input);
-        AgeInput = findViewById(R.id.ID_Age_Input);
-        SCrInput = findViewById(R.id.ID_SCr_Input);
-        SexInput = findViewById(R.id.ID_Sex_Input);
-        ObeseInput = findViewById(R.id.ID_Obese_Input);
-        CNS_Input = findViewById(R.id.ID_CNS_Input);
-        DosingView = findViewById(R.id.ID_dosing_result);
+        // initialize class variables with their corresponding UI elements
+        this.AUCInput = findViewById(R.id.ID_AUC_Input);
+        this.CrClInput = findViewById(R.id.ID_CrCl_Input);
+        this.WeightInput = findViewById(R.id.ID_BodyWeight_Input);
+        this.AgeInput = findViewById(R.id.ID_Age_Input);
+        this.SCrInput = findViewById(R.id.ID_SCr_Input);
+        this.SexInput = findViewById(R.id.ID_Sex_Input);
+        this.ObeseInput = findViewById(R.id.ID_Obese_Input);
+        this.CNS_Input = findViewById(R.id.ID_CNS_Input);
+        this.DosingView = findViewById(R.id.ID_dosing_result);
 
         // set Event Listeners on input fields to hide dosage info (so user never sees out of date dosage)
         List<android.widget.EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
@@ -63,7 +63,7 @@ public class InitialDose extends AppCompatActivity {
             inputs.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DosingView.setVisibility(View.GONE);
+                DosingView.setVisibility(View.GONE);
                 }
             });
         }
@@ -84,23 +84,23 @@ public class InitialDose extends AppCompatActivity {
         ObeseInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DosingView.setVisibility(View.GONE);
+            DosingView.setVisibility(View.GONE);
             }
         });
 
         CNS_Input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DosingView.setVisibility(View.GONE);
+            DosingView.setVisibility(View.GONE);
 
-                if (CNS_Input.isChecked()) {
-                    System.out.println("Checked");
-                    CNSOriginalValue = AUCInput.getText().toString();
-                    AUCInput.setText("600");
-                } else {
-                    System.out.println("Not checked");
-                    AUCInput.setText(CNSOriginalValue);
-                }
+            if (CNS_Input.isChecked()) {
+                System.out.println("Checked");
+                CNSOriginalValue = AUCInput.getText().toString();
+                AUCInput.setText("600");
+            } else {
+                System.out.println("Not checked");
+                AUCInput.setText(CNSOriginalValue);
+            }
             }
         });
     }
@@ -110,7 +110,14 @@ public class InitialDose extends AppCompatActivity {
         boolean inputIsValid = true;
 
         // highlight inputs in red if missing
-        List<EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
+        List<EditText> inputs = Arrays.asList(
+            this.AUCInput,
+            this.CrClInput,
+            this.WeightInput,
+            this.AgeInput,
+            this.SCrInput
+        );
+
         for (int i = 0; i < inputs.size(); i++) {
             String inputString = inputs.get(i).getText().toString();
             if (inputString.length() == 0) {
@@ -126,7 +133,6 @@ public class InitialDose extends AppCompatActivity {
             inputIsValid = false;
         }
 
-        // terminate execution if input is not valid
         if (!inputIsValid) {
             System.out.println("Inputs are NOT valid");
         }
@@ -135,10 +141,10 @@ public class InitialDose extends AppCompatActivity {
     }
 
     // button press onClick method
-    public void calculateButtonPressed(View view) {
+    public void calculateInitialDose(View view) {
         long sexID = SexInput.getSelectedItemId();
 
-        // terminate execution if user input is missing
+        // terminate execution if any user input is missing
         if (!this.validateUserInput(sexID)) {
             return;
         }
@@ -174,7 +180,7 @@ public class InitialDose extends AppCompatActivity {
         displayCalculatedValues(view, Ke, halfLife, Vd, finalClvan);
     }
 
-    // reset hint color to gray helper method
+    // helper method to reset hint color to gray
     private void resetHints() {
         List<EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
 
