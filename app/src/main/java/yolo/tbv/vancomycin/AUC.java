@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class AUC extends AppCompatActivity {
     // Variables that will hold onto various input fields
@@ -197,8 +198,11 @@ public class AUC extends AppCompatActivity {
 
         // halt execution of method if any user input is invalid
         if (!this.validateUserInput()) {
+            System.out.println("Inputs are NOT valid");
             return;
         }
+
+        System.out.println("Inputs are valid");
 
         // grab values from user input
         double initialDose = Double.parseDouble(this.initialDoseInput.getText().toString());
@@ -245,11 +249,31 @@ public class AUC extends AppCompatActivity {
         double truePeak = AUCCalculator.calculateTruePeak(measuredPeak, ke, hoursBetweenDoseAndLevelOne, initialInfusionDuration);
         double trueTrough = AUCCalculator.calculateTrueTrough(truePeak, ke, initialDoseFreq, initialInfusionDuration);
         double halfLife = InitialDoseCalculator.calculateHL(ke); // yes this is intentional
+        double vd = AUCCalculator.calculateVd(initialDose, initialInfusionDuration, ke, truePeak, trueTrough);
+        double auc24 = AUCCalculator.calculateAUC24(truePeak, trueTrough, initialInfusionDuration, ke, initialDoseFreq);
 
-        System.out.println("ke " + ke);
-        System.out.println("truePeak " + truePeak);
-        System.out.println("trueTrough " + trueTrough);
-        System.out.println("half-life " + halfLife);
+        // show calculated AUC estimated values
+        this.displayAUCEstimatedValues(ke, truePeak, trueTrough, halfLife, vd, auc24);
+    }
+
+    public void displayAUCEstimatedValues(double ke, double peak, double trough, double hl, double vd, double auc24) {
+        android.widget.TextView keResult = findViewById(R.id.AUC_ke_result);
+        android.widget.TextView peakResult = findViewById(R.id.AUC_peak_result);
+        android.widget.TextView troughResult = findViewById(R.id.AUC_trough_result);
+        android.widget.TextView hlResult = findViewById(R.id.AUC_hl_result);
+        android.widget.TextView vdResult = findViewById(R.id.AUC_VD_result);
+        android.widget.TextView aucResult = findViewById(R.id.AUC_computed_AUC_result);
+
+        keResult.setText(String.format(Locale.getDefault(),"%f", ke));
+        peakResult.setText(String.format(Locale.getDefault(),"%f", peak));
+        troughResult.setText(String.format(Locale.getDefault(),"%f", trough));
+        hlResult.setText(String.format(Locale.getDefault(),"%f", hl));
+        vdResult.setText(String.format(Locale.getDefault(),"%f", vd));
+        aucResult.setText(String.format(Locale.getDefault(),"%f", auc24));
+    }
+
+    public void displayRevisedDoseValues() {
+
     }
 
     // these functions are the onClick handlers...

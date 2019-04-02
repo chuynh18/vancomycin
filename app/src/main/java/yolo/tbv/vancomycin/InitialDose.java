@@ -133,10 +133,6 @@ public class InitialDose extends AppCompatActivity {
             inputIsValid = false;
         }
 
-        if (!inputIsValid) {
-            System.out.println("Inputs are NOT valid");
-        }
-
         return inputIsValid;
     }
 
@@ -144,10 +140,16 @@ public class InitialDose extends AppCompatActivity {
     public void calculateInitialDose(View view) {
         long sexID = SexInput.getSelectedItemId();
 
+        // clear red from all input fields and buttons
+        this.resetHints();
+
         // terminate execution if any user input is missing
         if (!this.validateUserInput(sexID)) {
+            System.out.println("Inputs are NOT valid");
             return;
         }
+
+        System.out.println("Inputs are valid");
 
         // grab values from user inputs
         double sexCalculateObeseClvan = (double) sexID - 1;
@@ -156,10 +158,6 @@ public class InitialDose extends AppCompatActivity {
         double bodyWeight = Double.parseDouble(WeightInput.getText().toString());
         double targetAUC = Double.parseDouble(AUCInput.getText().toString());
         boolean isObese = ObeseInput.isChecked();
-
-        // input is valid, so reset hint styling (change font color back to gray from red)
-        this.resetHints();
-        System.out.println("Inputs are valid");
 
         // actually do the math by calling appropriate methods from InitialDoseCalculator
         double Ke = InitialDoseCalculator.calculateKe(Double.parseDouble(CrClInput.getText().toString()));
@@ -216,14 +214,14 @@ public class InitialDose extends AppCompatActivity {
     }
 
     public void displayCalculatedValues(View view, double ke, double halfLife, double vd, double clvanco) {
-        android.widget.TextView Ke = findViewById(R.id.ID_ke_value);
-        android.widget.TextView Hl = findViewById(R.id.ID_halflife_value);
-        android.widget.TextView Vd = findViewById(R.id.ID_Vd_value);
-        android.widget.TextView Clvanco = findViewById(R.id.ID_clvanco_value);
+        android.widget.TextView keResult = findViewById(R.id.ID_ke_value);
+        android.widget.TextView hlResult = findViewById(R.id.ID_halflife_value);
+        android.widget.TextView vdResult = findViewById(R.id.ID_Vd_value);
+        android.widget.TextView clVancoResult = findViewById(R.id.ID_clvanco_value);
 
-        Ke.setText(String.format(Locale.getDefault(),"%f", ke));
-        Hl.setText(String.format(Locale.getDefault(),"%f", halfLife));
-        Vd.setText(String.format(Locale.getDefault(),"%f", vd));
-        Clvanco.setText(String.format(Locale.getDefault(),"%f", clvanco));
+        keResult.setText(String.format(Locale.getDefault(),"%f", ke));
+        hlResult.setText(String.format(Locale.getDefault(),"%f", halfLife));
+        vdResult.setText(String.format(Locale.getDefault(),"%f", vd));
+        clVancoResult.setText(String.format(Locale.getDefault(),"%f", clvanco));
     }
 }

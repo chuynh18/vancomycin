@@ -31,7 +31,24 @@ public final class AUCCalculator {
         return measuredPeak / Math.exp(ke * (infusionDuration - levelOneTime));
     }
 
-    public static double calculateTrueTrough(double truePeak, double ke, double initialDosingFreq, double infusionDuration) {
-        return truePeak * Math.exp(-ke * (initialDosingFreq - infusionDuration));
+    public static double calculateTrueTrough(double truePeak, double ke, double initialDoseFreq, double infusionDuration) {
+        return truePeak * Math.exp(-ke * (initialDoseFreq - infusionDuration));
+    }
+
+    public static double calculateVd(double initialDose, double infusionDuration, double ke, double truePeak, double trueTrough) {
+        double expKeAndInfusionDuration = Math.exp(ke * -infusionDuration);
+
+        double term1 = initialDose/infusionDuration;
+        double term2 = 1 - expKeAndInfusionDuration;
+        double term3 = ke * (truePeak - (trueTrough * expKeAndInfusionDuration));
+
+        return term1 * term2 / term3;
+    }
+
+    public static double calculateAUC24(double truePeak, double trueTrough, double infusionDuration, double ke, double initialDoseFreq) {
+        double aucInf = (truePeak + trueTrough) / 2 * infusionDuration;
+        double aucElim = (truePeak - trueTrough) / ke;
+
+        return (aucInf + aucElim) * 24 / initialDoseFreq;
     }
 }
