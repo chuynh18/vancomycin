@@ -19,6 +19,8 @@ public class AUC extends AppCompatActivity {
     private android.widget.EditText initialDoseInput;
     private android.widget.EditText initialDoseFreqInput;
     private android.widget.EditText initialInfusionDurationInput;
+    private android.widget.EditText measuredPeakInput;
+    private android.widget.EditText measuredTroughInput;
     private android.widget.EditText goalAuc24Input;
     private android.widget.EditText chosenDoseRevisionInput;
     private android.widget.EditText chosenDoseIntervalRevisionInput;
@@ -42,6 +44,9 @@ public class AUC extends AppCompatActivity {
     DatePickerFragment levelTwoDateFragment;
     TimePickerFragment levelTwoTimeFragment;
 
+    // lists of UI elements
+    List<EditText> editTextList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,8 @@ public class AUC extends AppCompatActivity {
         this.initialDoseInput = findViewById(R.id.AUC_initial_dose_input);
         this.initialDoseFreqInput = findViewById(R.id.AUC_initial_dose_freq_input);
         this.initialInfusionDurationInput = findViewById(R.id.AUC_initial_infusion_duration_input);
+        this.measuredPeakInput = findViewById(R.id.AUC_measured_peak_input);
+        this.measuredTroughInput = findViewById(R.id.AUC_measured_trough_input);
         this.goalAuc24Input = findViewById(R.id.AUC_goal_AUC_input);
         this.chosenDoseRevisionInput = findViewById(R.id.AUC_revision_chosen_dose_input);
         this.chosenDoseIntervalRevisionInput = findViewById(R.id.AUC_revision_dosing_interval_input);
@@ -94,6 +101,19 @@ public class AUC extends AppCompatActivity {
         levelTwoTimeBundle.putInt("viewId", R.id.level_2_time_button);
         this.levelTwoTimeFragment = new TimePickerFragment();
         this.levelTwoTimeFragment.setArguments(levelTwoTimeBundle);
+
+        // create UI element lists
+        this.editTextList = Arrays.asList(
+            this.initialDoseInput,
+            this.initialDoseFreqInput,
+            this.initialInfusionDurationInput,
+            this.measuredPeakInput,
+            this.measuredTroughInput,
+            this.goalAuc24Input,
+            this.chosenDoseRevisionInput,
+            this.chosenDoseIntervalRevisionInput,
+            this.chosenDoseInfusionDurationRevisionInput
+        );
     }
 
     // validates user input; warns user if any inputs are missing
@@ -101,20 +121,10 @@ public class AUC extends AppCompatActivity {
         boolean inputIsValid = true;
 
         // text box validation
-        List<EditText> inputs = Arrays.asList(
-            this.initialDoseInput,
-            this.initialDoseFreqInput,
-            this.initialInfusionDurationInput,
-            this.goalAuc24Input,
-            this.chosenDoseRevisionInput,
-            this.chosenDoseIntervalRevisionInput,
-            this.chosenDoseInfusionDurationRevisionInput
-        );
-
-        for (int i = 0; i < inputs.size(); i++) {
-            String inputString = inputs.get(i).getText().toString();
+        for (int i = 0; i < this.editTextList.size(); i++) {
+            String inputString = this.editTextList.get(i).getText().toString();
             if (inputString.length() == 0) {
-                inputs.get(i).setHintTextColor(Color.RED);
+                this.editTextList.get(i).setHintTextColor(Color.RED);
                 inputIsValid = false;
             }
         }
@@ -163,16 +173,6 @@ public class AUC extends AppCompatActivity {
 
     // helper method to reset hint color to gray
     private void resetHints() {
-        List<EditText> inputs = Arrays.asList(
-            this.initialDoseInput,
-            this.initialDoseFreqInput,
-            this.initialInfusionDurationInput,
-            this.goalAuc24Input,
-            this.chosenDoseRevisionInput,
-            this.chosenDoseIntervalRevisionInput,
-            this.chosenDoseInfusionDurationRevisionInput
-        );
-
         List<android.widget.Button> pickerButtons = Arrays.asList(
             this.precedingDoseDateButton,
             this.levelOneDateButton,
@@ -182,8 +182,8 @@ public class AUC extends AppCompatActivity {
             this.levelTwoTimeButton
         );
 
-        for (int i = 0; i < inputs.size(); i++) {
-            inputs.get(i).setHintTextColor(Color.GRAY);
+        for (int i = 0; i < this.editTextList.size(); i++) {
+            this.editTextList.get(i).setHintTextColor(Color.GRAY);
         }
 
         for (int i = 0; i < pickerButtons.size(); i++) {
@@ -201,13 +201,15 @@ public class AUC extends AppCompatActivity {
         }
 
         // grab values from user input
-        double initialDose = Double.parseDouble(initialDoseInput.getText().toString());
-        double initialDoseFreq = Double.parseDouble(initialDoseFreqInput.getText().toString());
-        double initialInfusionDuration = Double.parseDouble(initialInfusionDurationInput.getText().toString());
-        double goalAuc24 = Double.parseDouble(goalAuc24Input.getText().toString());
-        double chosenDoseRevision = Double.parseDouble(chosenDoseRevisionInput.getText().toString());
-        double chosenDoseIntervalRevision = Double.parseDouble(chosenDoseIntervalRevisionInput.getText().toString());
-        double chosenDoseInfusionDurationRevision = Double.parseDouble(chosenDoseInfusionDurationRevisionInput.getText().toString());
+        double initialDose = Double.parseDouble(this.initialDoseInput.getText().toString());
+        double initialDoseFreq = Double.parseDouble(this.initialDoseFreqInput.getText().toString());
+        double initialInfusionDuration = Double.parseDouble(this.initialInfusionDurationInput.getText().toString());
+        double measuredPeak = Double.parseDouble(this.measuredPeakInput.getText().toString());
+        double measuredTrough = Double.parseDouble(this.measuredTroughInput.getText().toString());
+        double goalAuc24 = Double.parseDouble(this.goalAuc24Input.getText().toString());
+        double chosenDoseRevision = Double.parseDouble(this.chosenDoseRevisionInput.getText().toString());
+        double chosenDoseIntervalRevision = Double.parseDouble(this.chosenDoseIntervalRevisionInput.getText().toString());
+        double chosenDoseInfusionDurationRevision = Double.parseDouble(this.chosenDoseInfusionDurationRevisionInput.getText().toString());
 
         // date objects
         LocalDateTime precedingDoseDateTime = LocalDateTime.of(
@@ -234,7 +236,20 @@ public class AUC extends AppCompatActivity {
             this.levelTwoTimeFragment.getChosenMinute()
         );
 
-        System.out.println(precedingDoseDateTime);
+        double hoursBetweenDoseAndLevelOne = AUCCalculator.hoursBetween(precedingDoseDateTime, levelOneDateTime);
+        double hoursBetweenLevelOneAndLevelTwo = AUCCalculator.hoursBetween(levelOneDateTime, levelTwoDateTime);
+        double hoursBetweenDoseAndLevelTwo = hoursBetweenDoseAndLevelOne + hoursBetweenLevelOneAndLevelTwo;
+
+        // finally, we actually calculate values that we'll output to the user
+        double ke = AUCCalculator.calculateKe(measuredPeak, measuredTrough, hoursBetweenLevelOneAndLevelTwo);
+        double truePeak = AUCCalculator.calculateTruePeak(measuredPeak, ke, hoursBetweenDoseAndLevelOne, initialInfusionDuration);
+        double trueTrough = AUCCalculator.calculateTrueTrough(truePeak, ke, initialDoseFreq, initialInfusionDuration);
+        double halfLife = InitialDoseCalculator.calculateHL(ke); // yes this is intentional
+
+        System.out.println("ke " + ke);
+        System.out.println("truePeak " + truePeak);
+        System.out.println("trueTrough " + trueTrough);
+        System.out.println("half-life " + halfLife);
     }
 
     // these functions are the onClick handlers...

@@ -30,7 +30,7 @@ public class DatePickerFragment extends DialogFragment
 
         if (userSelectedDate) {
             year = chosenYear;
-            month = chosenMonth;
+            month = chosenMonth - 1;
             day = chosenDay;
         } else {
             // Use the current date as the default date in the picker
@@ -47,12 +47,16 @@ public class DatePickerFragment extends DialogFragment
     public void onDateSet(DatePicker view, int year, int month, int day) {
         this.userSelectedDate = true;
         this.chosenYear = year;
-        this.chosenMonth = month;
+        this.chosenMonth = month + 1;
         this.chosenDay = day;
+
+        System.out.println("Year: " + this.chosenYear);
+        System.out.println("Month: " + this.chosenMonth);
+        System.out.println("Day: " + this.chosenDay);
 
         if (this.viewId > 0) {
             android.widget.Button button = getActivity().findViewById(viewId);
-            LocalDate inputDate = LocalDate.of(year, month, day);
+            LocalDate inputDate = LocalDate.of(this.chosenYear, this.chosenMonth, this.chosenDay);
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             button.setText(inputDate.format(dateTimeFormatter));
         }

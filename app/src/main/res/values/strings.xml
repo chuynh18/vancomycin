@@ -64,10 +64,10 @@
     <string name="auc_time_of_preceeding_dose">Time of preceding dose</string>
     <string name="auc_input_time">Input time</string>
     <string name="AUC_preceding_dose_label">Preceding dose</string>
-    <string name="AUC_measured_level_1_peak">Measured level 1 (Peak)</string>
+    <string name="AUC_level_1_peak">Level 1 (Peak)</string>
     <string name="AUC_date_of_level_1">Date of Level 1</string>
     <string name="AUC_time_of_level_1">Time of Level 1</string>
-    <string name="AUC_measured_level_2_trough">Measured level 2 (Trough)</string>
+    <string name="AUC_level_2_trough">Level 2 (Trough)</string>
     <string name="AUC_date_of_level_2">Date of Level 2</string>
     <string name="AUC_time_of_level_2">Time of Level 2</string>
     <string name="AUC_patient_parameters">Patient parameters</string>
@@ -98,4 +98,8 @@
     <string name="AUC_predicted_auc24_based_on_chosen_dose">Predicted AUC24 based on chosen dose</string>
     <string name="AUC_predicted_trough_based_on_chosen_dose">Predicted trough based on chosen dose</string>
     <string name="AUC_predicted_peak_based_on_chosen_dose">Predicted peak based on chosen dose</string>
+    <string name="AUC_measured_level_1_peak">Measured level 1 (peak)</string>
+    <string name="AUC_input_measured_peak">Input measured peak</string>
+    <string name="AUC_measured_level_2_trough">Measured level 2 (trough)</string>
+    <string name="AUC_input_measured_trough">Input measured trough</string>
 </resources>
