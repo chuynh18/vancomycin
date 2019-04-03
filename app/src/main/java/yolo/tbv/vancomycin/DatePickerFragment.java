@@ -12,32 +12,22 @@ import java.time.format.DateTimeFormatter;
 
 public final class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener{
+    private final Calendar c = Calendar.getInstance();
     private boolean userSelectedDate = false;
     private int viewId;
-    private int chosenYear;
-    private int chosenMonth;
-    private int chosenDay;
+    private int chosenYear = c.get(Calendar.YEAR);
+    private int chosenMonth = c.get(Calendar.MONTH) + 1;
+    private int chosenDay = c.get(Calendar.DAY_OF_MONTH);
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        int year;
-        int month;
-        int day;
+
+        int year = this.chosenYear;
+        int month = this.chosenMonth - 1;
+        int day = this.chosenDay;
 
         if (getArguments() != null) {
             this.viewId = getArguments().getInt("viewId");
-        }
-
-        if (userSelectedDate) {
-            year = chosenYear;
-            month = chosenMonth - 1;
-            day = chosenDay;
-        } else {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            year = c.get(Calendar.YEAR);
-            month = c.get(Calendar.MONTH);
-            day = c.get(Calendar.DAY_OF_MONTH);
         }
 
         // Create a new instance of DatePickerDialog and return it

@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -82,6 +84,7 @@ public final class AUC extends AppCompatActivity {
         precedingDoseDateBundle.putInt("viewId", R.id.preceeding_dose_date_button);
         this.precedingDoseDateFragment = new DatePickerFragment();
         this.precedingDoseDateFragment.setArguments(precedingDoseDateBundle);
+        setDateButtonText(R.id.preceeding_dose_date_button, precedingDoseDateFragment);
 
         Bundle precedingDoseTimeBundle = new Bundle();
         precedingDoseTimeBundle.putInt("viewId", R.id.preceeding_dose_time_button);
@@ -92,6 +95,7 @@ public final class AUC extends AppCompatActivity {
         levelOneDateBundle.putInt("viewId", R.id.level_1_date_button);
         this.levelOneDateFragment = new DatePickerFragment();
         this.levelOneDateFragment.setArguments(levelOneDateBundle);
+        setDateButtonText(R.id.level_1_date_button, levelOneDateFragment);
 
         Bundle levelOneTimeBundle = new Bundle();
         levelOneTimeBundle.putInt("viewId", R.id.level_1_time_button);
@@ -102,6 +106,7 @@ public final class AUC extends AppCompatActivity {
         levelTwoDateBundle.putInt("viewId", R.id.level_2_date_button);
         this.levelTwoDateFragment = new DatePickerFragment();
         this.levelTwoDateFragment.setArguments(levelTwoDateBundle);
+        setDateButtonText(R.id.level_2_date_button, levelTwoDateFragment);
 
         Bundle levelTwoTimeBundle = new Bundle();
         levelTwoTimeBundle.putInt("viewId", R.id.level_2_time_button);
@@ -130,6 +135,18 @@ public final class AUC extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    // set date button text helper method
+    private void setDateButtonText(int id, DatePickerFragment datePickerFragment) {
+        android.widget.Button button = findViewById(id);
+        LocalDate today = LocalDate.of(
+                datePickerFragment.getChosenYear(),
+                datePickerFragment.getChosenMonth(),
+                datePickerFragment.getChosenDay()
+        );
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        button.setText(today.format(dateTimeFormatter));
     }
 
     // validates user input; warns user if any inputs are missing
