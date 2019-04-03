@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vancomycin</string>
-    <string name="title_home">Early alpha.  Only Initial dose has been implemented.  Please be sure to double-check all computations.</string>
+    <string name="title_home">This app is not a substitute for professional judgment.  Please use care and double-check all values before administering vancomycin to patients.</string>
     <string name="title_dashboard">AUC calculator</string>
     <string name="title_notifications">Notifications</string>
     <string name="calculate_initial_dose">Calculate initial dose</string>

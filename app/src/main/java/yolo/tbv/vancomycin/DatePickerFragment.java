@@ -21,41 +21,36 @@ public final class DatePickerFragment extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        int year = this.chosenYear;
-        int month = this.chosenMonth;
-        int day = this.chosenDay;
-
         if (getArguments() != null) {
             this.viewId = getArguments().getInt("viewId");
         }
 
-        if (userSelectedDate) {
-            year = this.chosenYear;
-            month = this.chosenMonth - 1;
-            day = this.chosenDay;
-        }
-
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        return new DatePickerDialog(getActivity(), this, this.chosenYear, this.chosenMonth, this.chosenDay);
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         this.userSelectedDate = true;
         this.chosenYear = year;
-        this.chosenMonth = month + 1;
+        this.chosenMonth = month;
         this.chosenDay = day;
 
-        System.out.println("Year: " + this.chosenYear);
-        System.out.println("Month: " + this.chosenMonth);
-        System.out.println("Day: " + this.chosenDay);
-
         if (this.viewId > 0) {
-            android.widget.Button button = getActivity().findViewById(viewId);
-            LocalDate inputDate = LocalDate.of(this.chosenYear, this.chosenMonth, this.chosenDay);
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            button.setText(inputDate.format(dateTimeFormatter));
+            setButtonDate(this.viewId);
         }
+
+        ((AUC) getActivity()).dateTimeHintResetHelper();
+    }
+
+    private void setButtonDate(int viewId) {
+        android.widget.Button button = getActivity().findViewById(viewId);
+        button.setText(this.getDate());
+    }
+
+    public String getDate() {
+        LocalDate inputDate = LocalDate.of(this.chosenYear, this.chosenMonth + 1, this.chosenDay);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return inputDate.format(dateTimeFormatter);
     }
 
     public int getChosenYear() {

@@ -11,9 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -84,7 +82,7 @@ public final class AUC extends AppCompatActivity {
         precedingDoseDateBundle.putInt("viewId", R.id.preceeding_dose_date_button);
         this.precedingDoseDateFragment = new DatePickerFragment();
         this.precedingDoseDateFragment.setArguments(precedingDoseDateBundle);
-        setDateButtonText(R.id.preceeding_dose_date_button, precedingDoseDateFragment);
+        buttonTextSetter(R.id.preceeding_dose_date_button, this.precedingDoseDateFragment.getDate());
 
         Bundle precedingDoseTimeBundle = new Bundle();
         precedingDoseTimeBundle.putInt("viewId", R.id.preceeding_dose_time_button);
@@ -95,7 +93,7 @@ public final class AUC extends AppCompatActivity {
         levelOneDateBundle.putInt("viewId", R.id.level_1_date_button);
         this.levelOneDateFragment = new DatePickerFragment();
         this.levelOneDateFragment.setArguments(levelOneDateBundle);
-        setDateButtonText(R.id.level_1_date_button, levelOneDateFragment);
+        buttonTextSetter(R.id.level_1_date_button, this.levelOneDateFragment.getDate());
 
         Bundle levelOneTimeBundle = new Bundle();
         levelOneTimeBundle.putInt("viewId", R.id.level_1_time_button);
@@ -106,7 +104,7 @@ public final class AUC extends AppCompatActivity {
         levelTwoDateBundle.putInt("viewId", R.id.level_2_date_button);
         this.levelTwoDateFragment = new DatePickerFragment();
         this.levelTwoDateFragment.setArguments(levelTwoDateBundle);
-        setDateButtonText(R.id.level_2_date_button, levelTwoDateFragment);
+        buttonTextSetter(R.id.level_2_date_button, this.levelTwoDateFragment.getDate());
 
         Bundle levelTwoTimeBundle = new Bundle();
         levelTwoTimeBundle.putInt("viewId", R.id.level_2_time_button);
@@ -137,16 +135,9 @@ public final class AUC extends AppCompatActivity {
         }
     }
 
-    // set date button text helper method
-    private void setDateButtonText(int id, DatePickerFragment datePickerFragment) {
-        android.widget.Button button = findViewById(id);
-        LocalDate today = LocalDate.of(
-                datePickerFragment.getChosenYear(),
-                datePickerFragment.getChosenMonth() + 1,
-                datePickerFragment.getChosenDay()
-        );
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        button.setText(today.format(dateTimeFormatter));
+    private void buttonTextSetter(int buttonId, String textToSet) {
+        android.widget.Button button = findViewById(buttonId);
+        button.setText(textToSet);
     }
 
     // validates user input; warns user if any inputs are missing
@@ -162,23 +153,11 @@ public final class AUC extends AppCompatActivity {
             }
         }
 
-        // date and time picker validation
-        List<DatePickerFragment> datePickerFragments = Arrays.asList(
-            this.precedingDoseDateFragment,
-            this.levelOneDateFragment,
-            this.levelTwoDateFragment
-        );
-
+        // time picker validation
         List<TimePickerFragment> timePickerFragments = Arrays.asList(
             this.precedingDoseTimeFragment,
             this.levelOneTimeFragment,
             this.levelTwoTimeFragment
-        );
-
-        List<android.widget.Button> datePickerButtons = Arrays.asList(
-            this.precedingDoseDateButton,
-            this.levelOneDateButton,
-            this.levelTwoDateButton
         );
 
         List<android.widget.Button> timePickerButtons = Arrays.asList(
@@ -187,18 +166,56 @@ public final class AUC extends AppCompatActivity {
             this.levelTwoTimeButton
         );
 
-        for (int i = 0; i < datePickerFragments.size(); i++) {
-            if (!datePickerFragments.get(i).userDidChooseDate()) {
-                inputIsValid = false;
-                datePickerButtons.get(i).setTextColor(Color.RED);
-            }
-        }
-
         for (int i = 0; i < timePickerFragments.size(); i++) {
             if (!timePickerFragments.get(i).userDidChooseTime()) {
                 inputIsValid = false;
                 timePickerButtons.get(i).setTextColor(Color.RED);
             }
+        }
+
+        return inputIsValid;
+    }
+
+    private boolean validateDateTimeOrdering() {
+        boolean inputIsValid = true;
+
+        // date objects
+        LocalDateTime precedingDoseDateTime = createLocalDateTimeObject(
+                this.precedingDoseDateFragment,
+                this.precedingDoseTimeFragment
+        );
+
+        LocalDateTime levelOneDateTime = createLocalDateTimeObject(
+                this.levelOneDateFragment,
+                this.levelOneTimeFragment
+        );
+
+        LocalDateTime levelTwoDateTime = createLocalDateTimeObject(
+                this.levelTwoDateFragment,
+                this.levelTwoTimeFragment
+        );
+
+        levelOneDateButton.setTextColor(Color.BLACK);
+        levelOneTimeButton.setTextColor(Color.BLACK);
+        levelTwoDateButton.setTextColor(Color.BLACK);
+        levelTwoTimeButton.setTextColor(Color.BLACK);
+
+        if (precedingDoseDateTime.isAfter(levelOneDateTime) || precedingDoseDateTime.isEqual(levelOneDateTime)) {
+            inputIsValid = false;
+            levelOneDateButton.setTextColor(Color.RED);
+            levelOneTimeButton.setTextColor(Color.RED);
+        }
+
+        if (levelOneDateTime.isAfter(levelTwoDateTime) || levelOneDateTime.isEqual(levelTwoDateTime)) {
+            inputIsValid = false;
+            levelTwoDateButton.setTextColor(Color.RED);
+            levelTwoTimeButton.setTextColor(Color.RED);
+        }
+
+        if (precedingDoseDateTime.isAfter(levelTwoDateTime) || precedingDoseDateTime.isEqual(levelTwoDateTime)) {
+            inputIsValid = false;
+            levelTwoDateButton.setTextColor(Color.RED);
+            levelTwoTimeButton.setTextColor(Color.RED);
         }
 
         return inputIsValid;
@@ -224,12 +241,22 @@ public final class AUC extends AppCompatActivity {
         }
     }
 
+    private LocalDateTime createLocalDateTimeObject(DatePickerFragment datePickerFragment, TimePickerFragment timePickerFragment) {
+        return LocalDateTime.of(
+                datePickerFragment.getChosenYear(),
+                datePickerFragment.getChosenMonth() + 1,
+                datePickerFragment.getChosenDay(),
+                timePickerFragment.getChosenHour(),
+                timePickerFragment.getChosenMinute()
+        );
+    }
+
     public void calculateAucDose(View view) {
         // clear red from all input fields and buttons
         this.resetHints();
 
         // halt execution of method if any user input is invalid
-        if (!this.validateUserInput()) {
+        if (!this.validateUserInput() || !this.validateDateTimeOrdering()) {
             System.out.println("Inputs are NOT valid");
             return;
         }
@@ -248,28 +275,19 @@ public final class AUC extends AppCompatActivity {
         double chosenDoseInfusionDurationRevision = Double.parseDouble(this.chosenDoseInfusionDurationRevisionInput.getText().toString());
 
         // date objects
-        LocalDateTime precedingDoseDateTime = LocalDateTime.of(
-            this.precedingDoseDateFragment.getChosenYear(),
-            this.precedingDoseDateFragment.getChosenMonth(),
-            this.precedingDoseDateFragment.getChosenDay(),
-            this.precedingDoseTimeFragment.getChosenHour(),
-            this.precedingDoseTimeFragment.getChosenMinute()
+        LocalDateTime precedingDoseDateTime = createLocalDateTimeObject(
+                this.precedingDoseDateFragment,
+                this.precedingDoseTimeFragment
         );
 
-        LocalDateTime levelOneDateTime = LocalDateTime.of(
-            this.levelOneDateFragment.getChosenYear(),
-            this.levelOneDateFragment.getChosenMonth(),
-            this.levelOneDateFragment.getChosenDay(),
-            this.levelOneTimeFragment.getChosenHour(),
-            this.levelOneTimeFragment.getChosenMinute()
+        LocalDateTime levelOneDateTime = createLocalDateTimeObject(
+                this.levelOneDateFragment,
+                this.levelOneTimeFragment
         );
 
-        LocalDateTime levelTwoDateTime = LocalDateTime.of(
-            this.levelTwoDateFragment.getChosenYear(),
-            this.levelTwoDateFragment.getChosenMonth(),
-            this.levelTwoDateFragment.getChosenDay(),
-            this.levelTwoTimeFragment.getChosenHour(),
-            this.levelTwoTimeFragment.getChosenMinute()
+        LocalDateTime levelTwoDateTime = createLocalDateTimeObject(
+                this.levelTwoDateFragment,
+                this.levelTwoTimeFragment
         );
 
         double hoursBetweenDoseAndLevelOne = AUCCalculator.hoursBetween(precedingDoseDateTime, levelOneDateTime);
@@ -330,40 +348,44 @@ public final class AUC extends AppCompatActivity {
         revisedDosePeakResult.setText(String.format(Locale.getDefault(),"%f", revisedPeak));
     }
 
+    public void dateTimeHintResetHelper() {
+        if (
+                this.precedingDoseTimeFragment.userDidChooseTime()
+                && this.levelOneTimeFragment.userDidChooseTime()
+                && this.levelTwoTimeFragment.userDidChooseTime()
+        ) {
+            validateDateTimeOrdering();
+        }
+    }
+
     // these functions are the onClick handlers...
     public void pickPrecedingDoseDate(View v) {
         AucCalculationResult.setVisibility(View.GONE);
-        this.precedingDoseDateButton.setTextColor(Color.BLACK);
         this.precedingDoseDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickPrecedingDoseTime(View v) {
         AucCalculationResult.setVisibility(View.GONE);
-        this.precedingDoseTimeButton.setTextColor(Color.BLACK);
         this.precedingDoseTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void pickLevelOneDate(View v) {
         AucCalculationResult.setVisibility(View.GONE);
-        this.levelOneDateButton.setTextColor(Color.BLACK);
         this.levelOneDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickLevelOneTime(View v) {
         AucCalculationResult.setVisibility(View.GONE);
-        this.levelOneTimeButton.setTextColor(Color.BLACK);
         this.levelOneTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void pickLevelTwoDate(View v) {
         AucCalculationResult.setVisibility(View.GONE);
-        this.levelTwoDateButton.setTextColor(Color.BLACK);
         this.levelTwoDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickLevelTwoTime(View v) {
         AucCalculationResult.setVisibility(View.GONE);
-        this.levelTwoTimeButton.setTextColor(Color.BLACK);
         this.levelTwoTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }
     // end onClick handlers

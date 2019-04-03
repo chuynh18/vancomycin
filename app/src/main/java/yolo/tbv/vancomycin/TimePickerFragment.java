@@ -54,6 +54,8 @@ public final class TimePickerFragment extends DialogFragment
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("h:mm a");
             button.setText(inputTime.format(dateTimeFormatter));
         }
+
+        ((AUC) getActivity()).dateTimeHintResetHelper();
     }
 
     public int getChosenHour() {
