@@ -16,18 +16,24 @@ public final class DatePickerFragment extends DialogFragment
     private boolean userSelectedDate = false;
     private int viewId;
     private int chosenYear = c.get(Calendar.YEAR);
-    private int chosenMonth = c.get(Calendar.MONTH) + 1;
+    private int chosenMonth = c.get(Calendar.MONTH);
     private int chosenDay = c.get(Calendar.DAY_OF_MONTH);
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         int year = this.chosenYear;
-        int month = this.chosenMonth - 1;
+        int month = this.chosenMonth;
         int day = this.chosenDay;
 
         if (getArguments() != null) {
             this.viewId = getArguments().getInt("viewId");
+        }
+
+        if (userSelectedDate) {
+            year = this.chosenYear;
+            month = this.chosenMonth - 1;
+            day = this.chosenDay;
         }
 
         // Create a new instance of DatePickerDialog and return it

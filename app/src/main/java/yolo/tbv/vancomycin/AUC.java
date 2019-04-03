@@ -142,7 +142,7 @@ public final class AUC extends AppCompatActivity {
         android.widget.Button button = findViewById(id);
         LocalDate today = LocalDate.of(
                 datePickerFragment.getChosenYear(),
-                datePickerFragment.getChosenMonth(),
+                datePickerFragment.getChosenMonth() + 1,
                 datePickerFragment.getChosenDay()
         );
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
