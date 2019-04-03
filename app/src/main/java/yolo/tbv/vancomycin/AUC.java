@@ -1,6 +1,7 @@
 package yolo.tbv.vancomycin;
 
 import android.graphics.Color;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -15,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class AUC extends AppCompatActivity {
+public final class AUC extends AppCompatActivity {
     // Variables that will hold onto various input fields
     private android.widget.EditText initialDoseInput;
     private android.widget.EditText initialDoseFreqInput;
@@ -34,6 +35,9 @@ public class AUC extends AppCompatActivity {
     private android.widget.Button levelOneTimeButton;
     private android.widget.Button levelTwoDateButton;
     private android.widget.Button levelTwoTimeButton;
+
+    // the calculation result ConstraintLayout
+    private ConstraintLayout AucCalculationResult;
 
     // Date and time picker fragments
     DatePickerFragment precedingDoseDateFragment;
@@ -71,6 +75,7 @@ public class AUC extends AppCompatActivity {
         this.levelOneTimeButton = findViewById(R.id.level_1_time_button);
         this.levelTwoDateButton = findViewById(R.id.level_2_date_button);
         this.levelTwoTimeButton = findViewById(R.id.level_2_time_button);
+        this.AucCalculationResult = findViewById(R.id.AUC_calculation_results);
 
         // instantiate date and time pickers
         Bundle precedingDoseDateBundle = new Bundle();
@@ -115,6 +120,16 @@ public class AUC extends AppCompatActivity {
             this.chosenDoseIntervalRevisionInput,
             this.chosenDoseInfusionDurationRevisionInput
         );
+
+        // attach event handlers to hide calculation results so users never see out-of-date values
+        for (int i = 0; i < this.editTextList.size(); i++) {
+            this.editTextList.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                AucCalculationResult.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     // validates user input; warns user if any inputs are missing
@@ -242,9 +257,8 @@ public class AUC extends AppCompatActivity {
 
         double hoursBetweenDoseAndLevelOne = AUCCalculator.hoursBetween(precedingDoseDateTime, levelOneDateTime);
         double hoursBetweenLevelOneAndLevelTwo = AUCCalculator.hoursBetween(levelOneDateTime, levelTwoDateTime);
-        double hoursBetweenDoseAndLevelTwo = hoursBetweenDoseAndLevelOne + hoursBetweenLevelOneAndLevelTwo;
 
-        // finally, we actually calculate values that we'll output to the user
+        // finally, we calculate values that we'll output to the user, starting with AUC estimates
         double ke = AUCCalculator.calculateKe(measuredPeak, measuredTrough, hoursBetweenLevelOneAndLevelTwo);
         double truePeak = AUCCalculator.calculateTruePeak(measuredPeak, ke, hoursBetweenDoseAndLevelOne, initialInfusionDuration);
         double trueTrough = AUCCalculator.calculateTrueTrough(truePeak, ke, initialDoseFreq, initialInfusionDuration);
@@ -252,11 +266,24 @@ public class AUC extends AppCompatActivity {
         double vd = AUCCalculator.calculateVd(initialDose, initialInfusionDuration, ke, truePeak, trueTrough);
         double auc24 = AUCCalculator.calculateAUC24(truePeak, trueTrough, initialInfusionDuration, ke, initialDoseFreq);
 
+        // next, calculate dose revision values
+        double suggestedT = AUCCalculator.calculateSuggestedT(halfLife);
+        double recRevisedDose = AUCCalculator.calculateVancoDose(goalAuc24, auc24, initialDose, initialDoseFreq, suggestedT);
+        double predictedPeak = AUCCalculator.calculatePredictedPeak(vd, chosenDoseRevision, chosenDoseInfusionDurationRevision, ke, chosenDoseIntervalRevision);
+        double predictedTrough = AUCCalculator.calculatePredictedTrough(predictedPeak, ke, chosenDoseIntervalRevision, chosenDoseInfusionDurationRevision);
+        double predictedAuc24 = AUCCalculator.calculatePredictedAuc24(predictedPeak, predictedTrough, chosenDoseInfusionDurationRevision, ke, chosenDoseIntervalRevision);
+
         // show calculated AUC estimated values
         this.displayAUCEstimatedValues(ke, truePeak, trueTrough, halfLife, vd, auc24);
+
+        // show revised dose values
+        this.displayRevisedDoseValues(recRevisedDose, suggestedT, predictedAuc24, predictedPeak, predictedTrough);
+
+        // show calculations
+        AucCalculationResult.setVisibility(View.VISIBLE);
     }
 
-    public void displayAUCEstimatedValues(double ke, double peak, double trough, double hl, double vd, double auc24) {
+    private void displayAUCEstimatedValues(double ke, double peak, double trough, double hl, double vd, double auc24) {
         android.widget.TextView keResult = findViewById(R.id.AUC_ke_result);
         android.widget.TextView peakResult = findViewById(R.id.AUC_peak_result);
         android.widget.TextView troughResult = findViewById(R.id.AUC_trough_result);
@@ -272,37 +299,53 @@ public class AUC extends AppCompatActivity {
         aucResult.setText(String.format(Locale.getDefault(),"%f", auc24));
     }
 
-    public void displayRevisedDoseValues() {
+    private void displayRevisedDoseValues(double recRevisedDose, double suggestedT, double revisedAuc24, double revisedPeak, double revisedTrough) {
+        android.widget.TextView revisedDoseResult = findViewById(R.id.AUC_RD_revised_dose_result);
+        android.widget.TextView revisedDoseIntervalResult = findViewById(R.id.AUC_RD_dosing_interval_result);
+        android.widget.TextView revisedDoseAUC24Result = findViewById(R.id.AUC_RD_predicted_AUC_result);
+        android.widget.TextView revisedDoseTroughResult = findViewById(R.id.AUC_RD_trough_result);
+        android.widget.TextView revisedDosePeakResult = findViewById(R.id.AUC_RD_peak_result);
 
+        revisedDoseResult.setText(String.format(Locale.getDefault(),"%f", recRevisedDose));
+        revisedDoseIntervalResult.setText(String.format(Locale.getDefault(),"%f", suggestedT));
+        revisedDoseAUC24Result.setText(String.format(Locale.getDefault(),"%f", revisedAuc24));
+        revisedDoseTroughResult.setText(String.format(Locale.getDefault(),"%f", revisedTrough));
+        revisedDosePeakResult.setText(String.format(Locale.getDefault(),"%f", revisedPeak));
     }
 
     // these functions are the onClick handlers...
     public void pickPrecedingDoseDate(View v) {
+        AucCalculationResult.setVisibility(View.GONE);
         this.precedingDoseDateButton.setTextColor(Color.BLACK);
         this.precedingDoseDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickPrecedingDoseTime(View v) {
+        AucCalculationResult.setVisibility(View.GONE);
         this.precedingDoseTimeButton.setTextColor(Color.BLACK);
         this.precedingDoseTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void pickLevelOneDate(View v) {
+        AucCalculationResult.setVisibility(View.GONE);
         this.levelOneDateButton.setTextColor(Color.BLACK);
         this.levelOneDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickLevelOneTime(View v) {
+        AucCalculationResult.setVisibility(View.GONE);
         this.levelOneTimeButton.setTextColor(Color.BLACK);
         this.levelOneTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void pickLevelTwoDate(View v) {
+        AucCalculationResult.setVisibility(View.GONE);
         this.levelTwoDateButton.setTextColor(Color.BLACK);
         this.levelTwoDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickLevelTwoTime(View v) {
+        AucCalculationResult.setVisibility(View.GONE);
         this.levelTwoTimeButton.setTextColor(Color.BLACK);
         this.levelTwoTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }

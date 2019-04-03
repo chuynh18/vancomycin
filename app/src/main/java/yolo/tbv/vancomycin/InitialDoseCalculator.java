@@ -83,4 +83,17 @@ public final class InitialDoseCalculator {
     public static double calculateObese(double bodyWeight, double mgkg) {
         return mgkg*bodyWeight;
     }
+
+    public static double calculateCrCl(double sexIdMinus1, double age, double weight, double scr) {
+        double crcl = ((140 - age) * weight) / (72 * scr);
+
+        if (sexIdMinus1 == 0) {
+            System.out.println("Is female");
+            crcl *= 0.85;
+        } else {
+            System.out.println("Is male");
+        }
+
+        return capCrClAt150(crcl);
+    }
 }

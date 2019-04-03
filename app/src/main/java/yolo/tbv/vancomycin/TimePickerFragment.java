@@ -11,7 +11,7 @@ import android.widget.TimePicker;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class TimePickerFragment extends DialogFragment
+public final class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
 
     private boolean userSelectedTime = false;

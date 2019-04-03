@@ -102,4 +102,5 @@
     <string name="AUC_input_measured_peak">Input measured peak</string>
     <string name="AUC_measured_level_2_trough">Measured level 2 (trough)</string>
     <string name="AUC_input_measured_trough">Input measured trough</string>
+    <string name="input_crcl_manually">Input CrCl manually</string>
 </resources>

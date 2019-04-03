@@ -10,7 +10,7 @@ import android.widget.DatePicker;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class DatePickerFragment extends DialogFragment
+public final class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener{
     private boolean userSelectedDate = false;
     private int viewId;
