@@ -326,12 +326,12 @@ public final class AUC extends AppCompatActivity {
         android.widget.TextView vdResult = findViewById(R.id.AUC_VD_result);
         android.widget.TextView aucResult = findViewById(R.id.AUC_computed_AUC_result);
 
-        keResult.setText(String.format(Locale.getDefault(),"%f", ke));
-        peakResult.setText(String.format(Locale.getDefault(),"%f", peak));
-        troughResult.setText(String.format(Locale.getDefault(),"%f", trough));
-        hlResult.setText(String.format(Locale.getDefault(),"%f", hl));
-        vdResult.setText(String.format(Locale.getDefault(),"%f", vd));
-        aucResult.setText(String.format(Locale.getDefault(),"%f", auc24));
+        keResult.setText(String.format(Locale.getDefault(),"%.4f", ke));
+        peakResult.setText(String.format(Locale.getDefault(),"%.1f", peak));
+        troughResult.setText(String.format(Locale.getDefault(),"%.1f", trough));
+        hlResult.setText(String.format(Locale.getDefault(),"%.2f", hl));
+        vdResult.setText(String.format(Locale.getDefault(),"%.2f", vd));
+        aucResult.setText(String.format(Locale.getDefault(),"%.0f", auc24));
     }
 
     private void displayRevisedDoseValues(double recRevisedDose, double suggestedT, double revisedAuc24, double revisedPeak, double revisedTrough) {
@@ -341,11 +341,11 @@ public final class AUC extends AppCompatActivity {
         android.widget.TextView revisedDoseTroughResult = findViewById(R.id.AUC_RD_trough_result);
         android.widget.TextView revisedDosePeakResult = findViewById(R.id.AUC_RD_peak_result);
 
-        revisedDoseResult.setText(String.format(Locale.getDefault(),"%f", recRevisedDose));
-        revisedDoseIntervalResult.setText(String.format(Locale.getDefault(),"%f", suggestedT));
-        revisedDoseAUC24Result.setText(String.format(Locale.getDefault(),"%f", revisedAuc24));
-        revisedDoseTroughResult.setText(String.format(Locale.getDefault(),"%f", revisedTrough));
-        revisedDosePeakResult.setText(String.format(Locale.getDefault(),"%f", revisedPeak));
+        revisedDoseResult.setText(String.format(Locale.getDefault(),"%.0f", recRevisedDose));
+        revisedDoseIntervalResult.setText(String.format(Locale.getDefault(),"%.1f", suggestedT));
+        revisedDoseAUC24Result.setText(String.format(Locale.getDefault(),"%.0f", revisedAuc24));
+        revisedDoseTroughResult.setText(String.format(Locale.getDefault(),"%.1f", revisedTrough));
+        revisedDosePeakResult.setText(String.format(Locale.getDefault(),"%.1f", revisedPeak));
     }
 
     public void dateTimeHintResetHelper() {
@@ -361,31 +361,37 @@ public final class AUC extends AppCompatActivity {
     // these functions are the onClick handlers...
     public void pickPrecedingDoseDate(View v) {
         AucCalculationResult.setVisibility(View.GONE);
+        precedingDoseDateButton.setTextColor(Color.BLACK);
         this.precedingDoseDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickPrecedingDoseTime(View v) {
         AucCalculationResult.setVisibility(View.GONE);
+        precedingDoseTimeButton.setTextColor(Color.BLACK);
         this.precedingDoseTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void pickLevelOneDate(View v) {
         AucCalculationResult.setVisibility(View.GONE);
+        levelOneDateButton.setTextColor(Color.BLACK);
         this.levelOneDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickLevelOneTime(View v) {
         AucCalculationResult.setVisibility(View.GONE);
+        levelOneTimeButton.setTextColor(Color.BLACK);
         this.levelOneTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void pickLevelTwoDate(View v) {
         AucCalculationResult.setVisibility(View.GONE);
+        levelTwoDateButton.setTextColor(Color.BLACK);
         this.levelTwoDateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void pickLevelTwoTime(View v) {
         AucCalculationResult.setVisibility(View.GONE);
+        levelTwoTimeButton.setTextColor(Color.BLACK);
         this.levelTwoTimeFragment.show(getSupportFragmentManager(), "timePicker");
     }
     // end onClick handlers
