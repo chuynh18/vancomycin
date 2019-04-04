@@ -199,6 +199,14 @@ public final class InitialDose extends AppCompatActivity {
             if (inputString.length() == 0) {
                 inputs.get(i).setHintTextColor(Color.RED);
                 inputIsValid = false;
+            } else {
+                try {
+                    Double.parseDouble(inputString);
+                } catch (NumberFormatException e) {
+                    inputs.get(i).setText("");
+                    inputs.get(i).setHintTextColor(Color.RED);
+                    inputIsValid = false;
+                }
             }
         }
 
@@ -333,7 +341,7 @@ public final class InitialDose extends AppCompatActivity {
         android.widget.TextView vdResult = findViewById(R.id.ID_Vd_value);
         android.widget.TextView clVancoResult = findViewById(R.id.ID_clvanco_value);
 
-        keResult.setText(String.format(Locale.getDefault(),"%.4f", ke));
+        keResult.setText(String.format(Locale.getDefault(),"%.5f", ke));
         hlResult.setText(String.format(Locale.getDefault(),"%.2f", halfLife));
         vdResult.setText(String.format(Locale.getDefault(),"%.2f", vd));
         clVancoResult.setText(String.format(Locale.getDefault(),"%.2f", clvanco));

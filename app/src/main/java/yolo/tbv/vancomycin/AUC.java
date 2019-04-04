@@ -150,6 +150,14 @@ public final class AUC extends AppCompatActivity {
             if (inputString.length() == 0) {
                 this.editTextList.get(i).setHintTextColor(Color.RED);
                 inputIsValid = false;
+            } else {
+                try {
+                    Double.parseDouble(inputString);
+                } catch (NumberFormatException e) {
+                    this.editTextList.get(i).setText("");
+                    this.editTextList.get(i).setHintTextColor(Color.RED);
+                    inputIsValid = false;
+                }
             }
         }
 
@@ -326,7 +334,7 @@ public final class AUC extends AppCompatActivity {
         android.widget.TextView vdResult = findViewById(R.id.AUC_VD_result);
         android.widget.TextView aucResult = findViewById(R.id.AUC_computed_AUC_result);
 
-        keResult.setText(String.format(Locale.getDefault(),"%.4f", ke));
+        keResult.setText(String.format(Locale.getDefault(),"%.5f", ke));
         peakResult.setText(String.format(Locale.getDefault(),"%.1f", peak));
         troughResult.setText(String.format(Locale.getDefault(),"%.1f", trough));
         hlResult.setText(String.format(Locale.getDefault(),"%.2f", hl));
