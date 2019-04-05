@@ -327,21 +327,29 @@ public final class AUC extends AppCompatActivity {
 
     // calculateRevision true means also calculate AUC revision in addition to AUC estimate
     private void calculateAuc(boolean calculateRevision) {
+        boolean inputsValid = true;
+
         // clear red from all input fields and buttons
         this.resetHints();
 
         // halt execution of method if any user input is invalid
         if (!this.validateAucEstimateUserInput() || !this.validateDateTimeOrdering()) {
             System.out.println("Inputs are NOT valid");
+            inputsValid = false;
+        }
 
-            if (calculateRevision) {
-                if (!this.validateAucRevisionUserInput()) {
-                    System.out.println("Revision inputs also NOT valid");
-                }
+        if (calculateRevision) {
+            if (!this.validateAucRevisionUserInput()) {
+                System.out.println("Revision inputs also NOT valid");
+                inputsValid = false;
             }
+        }
 
+        if (!inputsValid) {
             return;
         }
+
+        System.out.println("Inputs are valid");
 
         // grab values from user input
         double initialDose = Double.parseDouble(this.initialDoseInput.getText().toString());
