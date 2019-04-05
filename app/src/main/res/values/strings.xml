@@ -78,7 +78,7 @@
     <string name="AUC_input_dosing_interval">Input dosing interval</string>
     <string name="AUC_infusion_duration_hr">Infusion duration (hr)</string>
     <string name="AUC_input_infusion_duration">Input infusion duration</string>
-    <string name="AUC_calculate_dosing">Calculate dosing</string>
+    <string name="AUC_calculate_dosing">Calculate revised dose</string>
     <string name="AUC_vd_l">Vd (L)</string>
     <string name="AUC_computed_vd">computed Vd</string>
     <string name="AUC_computed_ke">computed ke</string>
@@ -103,4 +103,6 @@
     <string name="AUC_measured_level_2_trough">Measured level 2 (trough)</string>
     <string name="AUC_input_measured_trough">Input measured trough</string>
     <string name="input_crcl_manually">Input CrCl manually</string>
+    <string name="AUC_calculate_initial_dose_estimate">Calculate initial dose estimate</string>
+    <string name="AUC_calculate_auc_revision">Calculate AUC Revision</string>
 </resources>

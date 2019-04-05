@@ -23,8 +23,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent intentAUC = new Intent(MainActivity.this, AUC.class);
                     startActivity(intentAUC);
                     return true;
-                case R.id.navigation_notifications:
-                    return true;
             }
             return false;
         }

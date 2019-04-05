@@ -38,6 +38,7 @@ public final class AUC extends AppCompatActivity {
 
     // the calculation result ConstraintLayout
     private ConstraintLayout AucCalculationResult;
+    private ConstraintLayout EstimatedAucResult;
 
     // Date and time picker fragments
     DatePickerFragment precedingDoseDateFragment;
@@ -50,7 +51,8 @@ public final class AUC extends AppCompatActivity {
     TimePickerFragment levelTwoTimeFragment;
 
     // lists of UI elements
-    List<EditText> editTextList;
+    List<EditText> estimateAucTextList;
+    List<EditText> reviseAucTextList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public final class AUC extends AppCompatActivity {
         this.levelTwoDateButton = findViewById(R.id.level_2_date_button);
         this.levelTwoTimeButton = findViewById(R.id.level_2_time_button);
         this.AucCalculationResult = findViewById(R.id.AUC_calculation_results);
+        this.EstimatedAucResult = findViewById(R.id.AUC_estimated_AUC_result);
 
         // instantiate date and time pickers
         Bundle precedingDoseDateBundle = new Bundle();
@@ -112,24 +115,56 @@ public final class AUC extends AppCompatActivity {
         this.levelTwoTimeFragment.setArguments(levelTwoTimeBundle);
 
         // create UI element lists
-        this.editTextList = Arrays.asList(
-            this.initialDoseInput,
-            this.initialDoseFreqInput,
-            this.initialInfusionDurationInput,
-            this.measuredPeakInput,
-            this.measuredTroughInput,
-            this.goalAuc24Input,
-            this.chosenDoseRevisionInput,
-            this.chosenDoseIntervalRevisionInput,
-            this.chosenDoseInfusionDurationRevisionInput
+        this.estimateAucTextList = Arrays.asList(
+                this.initialDoseInput,
+                this.initialDoseFreqInput,
+                this.initialInfusionDurationInput,
+                this.measuredPeakInput,
+                this.measuredTroughInput
+        );
+
+        this.reviseAucTextList = Arrays.asList(
+                this.goalAuc24Input,
+                this.chosenDoseRevisionInput,
+                this.chosenDoseIntervalRevisionInput,
+                this.chosenDoseInfusionDurationRevisionInput
         );
 
         // attach event handlers to hide calculation results so users never see out-of-date values
-        for (int i = 0; i < this.editTextList.size(); i++) {
-            this.editTextList.get(i).setOnClickListener(new View.OnClickListener() {
+        for (int i = 0; i < this.estimateAucTextList.size(); i++) {
+            this.estimateAucTextList.get(i).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (b) {
+                        AucCalculationResult.setVisibility(View.GONE);
+                        EstimatedAucResult.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            this.estimateAucTextList.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                AucCalculationResult.setVisibility(View.GONE);
+                    AucCalculationResult.setVisibility(View.GONE);
+                    EstimatedAucResult.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        for (int i = 0; i < this.reviseAucTextList.size(); i++) {
+            this.reviseAucTextList.get(i).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (b) {
+                        AucCalculationResult.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            this.reviseAucTextList.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AucCalculationResult.setVisibility(View.GONE);
                 }
             });
         }
@@ -140,22 +175,21 @@ public final class AUC extends AppCompatActivity {
         button.setText(textToSet);
     }
 
-    // validates user input; warns user if any inputs are missing
-    private boolean validateUserInput() {
+    private boolean validateAucEstimateUserInput() {
         boolean inputIsValid = true;
 
         // text box validation
-        for (int i = 0; i < this.editTextList.size(); i++) {
-            String inputString = this.editTextList.get(i).getText().toString();
+        for (int i = 0; i < this.estimateAucTextList.size(); i++) {
+            String inputString = this.estimateAucTextList.get(i).getText().toString();
             if (inputString.length() == 0) {
-                this.editTextList.get(i).setHintTextColor(Color.RED);
+                this.estimateAucTextList.get(i).setHintTextColor(Color.RED);
                 inputIsValid = false;
             } else {
                 try {
                     Double.parseDouble(inputString);
                 } catch (NumberFormatException e) {
-                    this.editTextList.get(i).setText("");
-                    this.editTextList.get(i).setHintTextColor(Color.RED);
+                    this.estimateAucTextList.get(i).setText("");
+                    this.estimateAucTextList.get(i).setHintTextColor(Color.RED);
                     inputIsValid = false;
                 }
             }
@@ -163,21 +197,45 @@ public final class AUC extends AppCompatActivity {
 
         // time picker validation
         List<TimePickerFragment> timePickerFragments = Arrays.asList(
-            this.precedingDoseTimeFragment,
-            this.levelOneTimeFragment,
-            this.levelTwoTimeFragment
+                this.precedingDoseTimeFragment,
+                this.levelOneTimeFragment,
+                this.levelTwoTimeFragment
         );
 
         List<android.widget.Button> timePickerButtons = Arrays.asList(
-            this.precedingDoseTimeButton,
-            this.levelOneTimeButton,
-            this.levelTwoTimeButton
+                this.precedingDoseTimeButton,
+                this.levelOneTimeButton,
+                this.levelTwoTimeButton
         );
 
         for (int i = 0; i < timePickerFragments.size(); i++) {
             if (!timePickerFragments.get(i).userDidChooseTime()) {
                 inputIsValid = false;
                 timePickerButtons.get(i).setTextColor(Color.RED);
+            }
+        }
+
+        return inputIsValid;
+    }
+
+    // validates user input; warns user if any inputs are missing
+    private boolean validateAucRevisionUserInput() {
+        boolean inputIsValid = true;
+
+        // text box validation
+        for (int i = 0; i < this.reviseAucTextList.size(); i++) {
+            String inputString = this.reviseAucTextList.get(i).getText().toString();
+            if (inputString.length() == 0) {
+                this.reviseAucTextList.get(i).setHintTextColor(Color.RED);
+                inputIsValid = false;
+            } else {
+                try {
+                    Double.parseDouble(inputString);
+                } catch (NumberFormatException e) {
+                    this.reviseAucTextList.get(i).setText("");
+                    this.reviseAucTextList.get(i).setHintTextColor(Color.RED);
+                    inputIsValid = false;
+                }
             }
         }
 
@@ -240,8 +298,8 @@ public final class AUC extends AppCompatActivity {
             this.levelTwoTimeButton
         );
 
-        for (int i = 0; i < this.editTextList.size(); i++) {
-            this.editTextList.get(i).setHintTextColor(Color.GRAY);
+        for (int i = 0; i < this.estimateAucTextList.size(); i++) {
+            this.estimateAucTextList.get(i).setHintTextColor(Color.GRAY);
         }
 
         for (int i = 0; i < pickerButtons.size(); i++) {
@@ -259,17 +317,31 @@ public final class AUC extends AppCompatActivity {
         );
     }
 
-    public void calculateAucDose(View view) {
+    public void calculateAucEstimate(View view) {
+        calculateAuc(false);
+    }
+
+    public void calculateAucRevision(View view) {
+        calculateAuc(true);
+    }
+
+    // calculateRevision true means also calculate AUC revision in addition to AUC estimate
+    private void calculateAuc(boolean calculateRevision) {
         // clear red from all input fields and buttons
         this.resetHints();
 
         // halt execution of method if any user input is invalid
-        if (!this.validateUserInput() || !this.validateDateTimeOrdering()) {
+        if (!this.validateAucEstimateUserInput() || !this.validateDateTimeOrdering()) {
             System.out.println("Inputs are NOT valid");
+
+            if (calculateRevision) {
+                if (!this.validateAucRevisionUserInput()) {
+                    System.out.println("Revision inputs also NOT valid");
+                }
+            }
+
             return;
         }
-
-        System.out.println("Inputs are valid");
 
         // grab values from user input
         double initialDose = Double.parseDouble(this.initialDoseInput.getText().toString());
@@ -277,10 +349,10 @@ public final class AUC extends AppCompatActivity {
         double initialInfusionDuration = Double.parseDouble(this.initialInfusionDurationInput.getText().toString());
         double measuredPeak = Double.parseDouble(this.measuredPeakInput.getText().toString());
         double measuredTrough = Double.parseDouble(this.measuredTroughInput.getText().toString());
-        double goalAuc24 = Double.parseDouble(this.goalAuc24Input.getText().toString());
-        double chosenDoseRevision = Double.parseDouble(this.chosenDoseRevisionInput.getText().toString());
-        double chosenDoseIntervalRevision = Double.parseDouble(this.chosenDoseIntervalRevisionInput.getText().toString());
-        double chosenDoseInfusionDurationRevision = Double.parseDouble(this.chosenDoseInfusionDurationRevisionInput.getText().toString());
+        double goalAuc24 = -1;
+        double chosenDoseRevision = -1;
+        double chosenDoseIntervalRevision = -1;
+        double chosenDoseInfusionDurationRevision = -1;
 
         // date objects
         LocalDateTime precedingDoseDateTime = createLocalDateTimeObject(
@@ -310,20 +382,34 @@ public final class AUC extends AppCompatActivity {
         double auc24 = AUCCalculator.calculateAUC24(truePeak, trueTrough, initialInfusionDuration, ke, initialDoseFreq);
 
         // next, calculate dose revision values
-        double suggestedT = AUCCalculator.calculateSuggestedT(halfLife);
-        double recRevisedDose = AUCCalculator.calculateVancoDose(goalAuc24, auc24, initialDose, initialDoseFreq, suggestedT);
-        double predictedPeak = AUCCalculator.calculatePredictedPeak(vd, chosenDoseRevision, chosenDoseInfusionDurationRevision, ke, chosenDoseIntervalRevision);
-        double predictedTrough = AUCCalculator.calculatePredictedTrough(predictedPeak, ke, chosenDoseIntervalRevision, chosenDoseInfusionDurationRevision);
-        double predictedAuc24 = AUCCalculator.calculatePredictedAuc24(predictedPeak, predictedTrough, chosenDoseInfusionDurationRevision, ke, chosenDoseIntervalRevision);
+        double suggestedT = -1;
+        double recRevisedDose = -1;
+        double predictedPeak = -1;
+        double predictedTrough = -1;
+        double predictedAuc24 = -1;
+
+        if (calculateRevision) {
+            goalAuc24 = Double.parseDouble(this.goalAuc24Input.getText().toString());
+            chosenDoseRevision = Double.parseDouble(this.chosenDoseRevisionInput.getText().toString());
+            chosenDoseIntervalRevision = Double.parseDouble(this.chosenDoseIntervalRevisionInput.getText().toString());
+            chosenDoseInfusionDurationRevision = Double.parseDouble(this.chosenDoseInfusionDurationRevisionInput.getText().toString());
+
+            suggestedT = AUCCalculator.calculateSuggestedT(halfLife);
+            recRevisedDose = AUCCalculator.calculateVancoDose(goalAuc24, auc24, initialDose, initialDoseFreq, suggestedT);
+            predictedPeak = AUCCalculator.calculatePredictedPeak(vd, chosenDoseRevision, chosenDoseInfusionDurationRevision, ke, chosenDoseIntervalRevision);
+            predictedTrough = AUCCalculator.calculatePredictedTrough(predictedPeak, ke, chosenDoseIntervalRevision, chosenDoseInfusionDurationRevision);
+            predictedAuc24 = AUCCalculator.calculatePredictedAuc24(predictedPeak, predictedTrough, chosenDoseInfusionDurationRevision, ke, chosenDoseIntervalRevision);
+
+            // show revised dose values
+            this.displayRevisedDoseValues(recRevisedDose, suggestedT, predictedAuc24, predictedPeak, predictedTrough);
+            AucCalculationResult.setVisibility(View.VISIBLE);
+        }
 
         // show calculated AUC estimated values
         this.displayAUCEstimatedValues(ke, truePeak, trueTrough, halfLife, vd, auc24);
 
-        // show revised dose values
-        this.displayRevisedDoseValues(recRevisedDose, suggestedT, predictedAuc24, predictedPeak, predictedTrough);
-
         // show calculations
-        AucCalculationResult.setVisibility(View.VISIBLE);
+        EstimatedAucResult.setVisibility(View.VISIBLE);
     }
 
     private void displayAUCEstimatedValues(double ke, double peak, double trough, double hl, double vd, double auc24) {

@@ -69,6 +69,19 @@ public final class InitialDose extends AppCompatActivity {
         List<android.widget.EditText> inputs = Arrays.asList(AUCInput, WeightInput, AgeInput, SCrInput, CrClInput);
 
         for (int i = 0; i < inputs.size(); i++) {
+            inputs.get(i).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (b) {
+                        DosingView.setVisibility(View.GONE);
+
+                        if (!Manual_CrCl.isChecked()) {
+                            autofillCrClIfPossible();
+                        }
+                    }
+                }
+            });
+
             inputs.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -222,6 +235,11 @@ public final class InitialDose extends AppCompatActivity {
 
     // button press onClick method
     public void calculateInitialDose(View view) {
+        // update autofilled CrCl first, if applicable
+        if (!Manual_CrCl.isChecked()) {
+            autofillCrClIfPossible();
+        }
+
         long sexID = SexInput.getSelectedItemId();
 
         // clear red from all input fields and buttons
