@@ -106,5 +106,5 @@
     <string name="AUC_calculate_initial_dose_estimate">Calculate initial dose estimate</string>
     <string name="AUC_calculate_auc_revision">Calculate AUC Revision</string>
     <string name="AUC_suggest_a_revised_dose">Suggest a revised dose (Optional)</string>
-    <string name="AUC_patient_parameters_info_text">This section is optional. If used, it will calculate a suggested chosen dose and chosen dosing interval for you.</string>
+    <string name="AUC_patient_parameters_info_text">Calculate a revised dose and revised dosing interval, then inserts those values in the dose revision section below.</string>
 </resources>

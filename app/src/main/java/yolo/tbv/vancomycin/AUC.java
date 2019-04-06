@@ -1,6 +1,8 @@
 package yolo.tbv.vancomycin;
 
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,14 +11,19 @@ import android.text.Spanned;
 import android.text.style.SubscriptSpan;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 public final class AUC extends AppCompatActivity {
+    // the scrollview
+    private ScrollView scrollView;
+
     // Variables that will hold onto various input fields
     private android.widget.EditText initialDoseInput;
     private android.widget.EditText initialDoseFreqInput;
@@ -63,6 +70,7 @@ public final class AUC extends AppCompatActivity {
         this.setAUC24Subscript();
 
         // initialize class variables with their corresponding UI elements
+        this.scrollView = findViewById(R.id.AUC_ScrollView);
         this.initialDoseInput = findViewById(R.id.AUC_initial_dose_input);
         this.initialDoseFreqInput = findViewById(R.id.AUC_initial_dose_freq_input);
         this.initialInfusionDurationInput = findViewById(R.id.AUC_initial_infusion_duration_input);
@@ -181,6 +189,7 @@ public final class AUC extends AppCompatActivity {
 
     private boolean validateEditTextList(List<EditText> textList) {
         boolean inputIsValid = true;
+        boolean doNotScroll = false;
 
         // text box validation
         for (int i = 0; i < textList.size(); i++) {
@@ -197,47 +206,35 @@ public final class AUC extends AppCompatActivity {
                     inputIsValid = false;
                 }
             }
-        }
 
-        return inputIsValid;
-    }
-
-    private boolean validateAucEstimateUserInput() {
-        boolean inputIsValid = true;
-
-        // text box validation
-        inputIsValid = this.validateEditTextList(this.estimateAucTextList);
-
-        // time picker validation
-        List<TimePickerFragment> timePickerFragments = Arrays.asList(
-                this.precedingDoseTimeFragment,
-                this.levelOneTimeFragment,
-                this.levelTwoTimeFragment
-        );
-
-        List<android.widget.Button> timePickerButtons = Arrays.asList(
-                this.precedingDoseTimeButton,
-                this.levelOneTimeButton,
-                this.levelTwoTimeButton
-        );
-
-        for (int i = 0; i < timePickerFragments.size(); i++) {
-            if (!timePickerFragments.get(i).userDidChooseTime()) {
-                inputIsValid = false;
-                timePickerButtons.get(i).setTextColor(Color.RED);
+            if (!inputIsValid && !doNotScroll) {
+                this.focusOnView(textList.get(i), scrollView);
+                doNotScroll = true;
             }
         }
 
         return inputIsValid;
     }
 
-    // validates user input; warns user if any inputs are missing
-    private boolean validateAucRevisionUserInput() {
-        return this.validateEditTextList(this.reviseAucTextList);
+    private void focusOnView(final View view, final ScrollView scrollView){
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                int[] coordinates = new int[2];
+                int halfScreenHeight = Resources.getSystem().getDisplayMetrics().heightPixels / 2;
+
+                view.getLocationOnScreen(coordinates);
+                scrollView.smoothScrollTo(
+                        0,
+                        coordinates[1] + scrollView.getScrollY() - halfScreenHeight
+                );
+            }
+        });
     }
 
-    private boolean validateDateTimeOrdering() {
+    private boolean validateDateTimeOrdering(boolean scroll) {
         boolean inputIsValid = true;
+        boolean hasScrolled = scroll;
 
         // date objects
         LocalDateTime precedingDoseDateTime = createLocalDateTimeObject(
@@ -260,22 +257,61 @@ public final class AUC extends AppCompatActivity {
         levelTwoDateButton.setTextColor(Color.BLACK);
         levelTwoTimeButton.setTextColor(Color.BLACK);
 
+        if (!precedingDoseTimeFragment.userDidChooseTime()) {
+            inputIsValid = false;
+            precedingDoseTimeButton.setTextColor(Color.RED);
+
+            if (!hasScrolled) {
+                hasScrolled = true;
+                focusOnView(precedingDoseTimeButton, scrollView);
+            }
+        }
+
         if (precedingDoseDateTime.isAfter(levelOneDateTime) || precedingDoseDateTime.isEqual(levelOneDateTime)) {
             inputIsValid = false;
-            levelOneDateButton.setTextColor(Color.RED);
+
+            // only make date button red if the user chose a time
+            if (levelOneTimeFragment.userDidChooseTime()) {
+                levelOneDateButton.setTextColor(Color.RED);
+            }
+
             levelOneTimeButton.setTextColor(Color.RED);
+
+            if (!hasScrolled) {
+                hasScrolled = true;
+                focusOnView(levelOneTimeButton, scrollView);
+            }
         }
 
         if (levelOneDateTime.isAfter(levelTwoDateTime) || levelOneDateTime.isEqual(levelTwoDateTime)) {
             inputIsValid = false;
-            levelTwoDateButton.setTextColor(Color.RED);
+
+            // only make date button red if the user chose a time
+            if (levelTwoTimeFragment.userDidChooseTime()) {
+                levelTwoDateButton.setTextColor(Color.RED);
+            }
+
             levelTwoTimeButton.setTextColor(Color.RED);
+
+            if (!hasScrolled) {
+                hasScrolled = true;
+                focusOnView(levelTwoTimeButton, scrollView);
+            }
         }
 
         if (precedingDoseDateTime.isAfter(levelTwoDateTime) || precedingDoseDateTime.isEqual(levelTwoDateTime)) {
             inputIsValid = false;
-            levelTwoDateButton.setTextColor(Color.RED);
+
+            // only make date button red if the user chose a time
+            if (levelTwoTimeFragment.userDidChooseTime()) {
+                levelTwoDateButton.setTextColor(Color.RED);
+            }
+
             levelTwoTimeButton.setTextColor(Color.RED);
+
+            if (!hasScrolled) {
+                focusOnView(levelTwoTimeButton, scrollView);
+            }
         }
 
         return inputIsValid;
@@ -330,30 +366,44 @@ public final class AUC extends AppCompatActivity {
     // calculateRevision true means also calculate AUC revision in addition to AUC estimate
     private void calculateAuc(boolean calculateRevision, boolean suggestDose) {
         boolean inputsValid = true;
+        boolean scroll = false;
 
         // clear red from all input fields and buttons
         this.resetHints();
 
-        // halt execution of method if any user input is invalid
-        if (!this.validateAucEstimateUserInput() || !this.validateDateTimeOrdering()) {
-            System.out.println("Inputs are NOT valid");
+        // check that values entered in EditTexts are valid
+        if (!calculateRevision && !suggestDose) {
+            if (!this.validateEditTextList(this.estimateAucTextList)) {
+                inputsValid = false;
+                scroll = true;
+            }
+        } else if (!calculateRevision && suggestDose) {
+            List<EditText> newList = new ArrayList<>();
+            newList.addAll(estimateAucTextList);
+            newList.addAll(suggestDoseTextList);
+
+            if (!this.validateEditTextList(newList)) {
+                inputsValid = false;
+                scroll = true;
+            }
+        } else if (calculateRevision && !suggestDose) {
+            List<EditText> newList = new ArrayList<>();
+            newList.addAll(estimateAucTextList);
+            newList.addAll(reviseAucTextList);
+
+            if (!this.validateEditTextList(newList)) {
+                inputsValid = false;
+                scroll = true;
+            }
+        }
+
+        // check that provided DateTimes are valid
+        if (!this.validateDateTimeOrdering(scroll)) {
             inputsValid = false;
         }
 
-        if (calculateRevision) {
-            if (!this.validateAucRevisionUserInput()) {
-                System.out.println("Revision inputs also NOT valid");
-                inputsValid = false;
-            }
-        }
-
-        if (suggestDose) {
-            if (!this.validateEditTextList(this.suggestDoseTextList)) {
-                inputsValid = false;
-            }
-        }
-
         if (!inputsValid) {
+            System.out.println("Inputs are NOT valid");
             return;
         }
 
@@ -468,13 +518,14 @@ public final class AUC extends AppCompatActivity {
         revisedDosePeakResult.setText(String.format(Locale.getDefault(),"%.1f", revisedPeak));
     }
 
+    // used by TimePickerFragment class
     public void dateTimeHintResetHelper() {
         if (
                 this.precedingDoseTimeFragment.userDidChooseTime()
                 && this.levelOneTimeFragment.userDidChooseTime()
                 && this.levelTwoTimeFragment.userDidChooseTime()
         ) {
-            validateDateTimeOrdering();
+            validateDateTimeOrdering(false);
         }
     }
 
