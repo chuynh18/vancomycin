@@ -70,7 +70,7 @@
     <string name="AUC_level_2_trough">Level 2 (Trough)</string>
     <string name="AUC_date_of_level_2">Date of Level 2</string>
     <string name="AUC_time_of_level_2">Time of Level 2</string>
-    <string name="AUC_patient_parameters">Patient parameters (optional)</string>
+    <string name="AUC_patient_parameters">Patient parameters</string>
     <string name="AUC_dose_revision">Dose revision</string>
     <string name="AUC_chosen_dose_mg">Chosen dose (mg)</string>
     <string name="AUC_input_chosen_dose">Input chosen dose</string>
@@ -106,4 +106,5 @@
     <string name="AUC_calculate_initial_dose_estimate">Calculate initial dose estimate</string>
     <string name="AUC_calculate_auc_revision">Calculate AUC Revision</string>
     <string name="AUC_suggest_a_revised_dose">Suggest a revised dose (Optional)</string>
+    <string name="AUC_patient_parameters_info_text">This section is optional. If used, it will calculate a suggested chosen dose and chosen dosing interval for you.</string>
 </resources>
