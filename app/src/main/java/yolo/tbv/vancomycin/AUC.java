@@ -62,6 +62,14 @@ public final class AUC extends AppCompatActivity {
     List<EditText> reviseAucTextList;
     List<EditText> suggestDoseTextList;
 
+    // enum for calculate function
+    // ESTIMATE:  we are only calculating an AUC estimate based on measured values from the patient
+    // SUGGESTION:  we are calculating a suggested revise dose in addition to the initial estimate
+    // REVISION:  we are calculating a revised dose in addition to the initial estimate
+    private enum CalculationType {
+        ESTIMATE, SUGGESTION, REVISION
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +102,7 @@ public final class AUC extends AppCompatActivity {
         precedingDoseDateBundle.putInt("viewId", R.id.preceeding_dose_date_button);
         this.precedingDoseDateFragment = new DatePickerFragment();
         this.precedingDoseDateFragment.setArguments(precedingDoseDateBundle);
+        // set to today's date
         buttonTextSetter(R.id.preceeding_dose_date_button, this.precedingDoseDateFragment.getDate());
 
         Bundle precedingDoseTimeBundle = new Bundle();
@@ -105,6 +114,7 @@ public final class AUC extends AppCompatActivity {
         levelOneDateBundle.putInt("viewId", R.id.level_1_date_button);
         this.levelOneDateFragment = new DatePickerFragment();
         this.levelOneDateFragment.setArguments(levelOneDateBundle);
+        // set to today's date
         buttonTextSetter(R.id.level_1_date_button, this.levelOneDateFragment.getDate());
 
         Bundle levelOneTimeBundle = new Bundle();
@@ -116,6 +126,7 @@ public final class AUC extends AppCompatActivity {
         levelTwoDateBundle.putInt("viewId", R.id.level_2_date_button);
         this.levelTwoDateFragment = new DatePickerFragment();
         this.levelTwoDateFragment.setArguments(levelTwoDateBundle);
+        // set to today's date
         buttonTextSetter(R.id.level_2_date_button, this.levelTwoDateFragment.getDate());
 
         Bundle levelTwoTimeBundle = new Bundle();
@@ -182,14 +193,17 @@ public final class AUC extends AppCompatActivity {
         }
     }
 
+    // helper method to set a button's text to a value programmatically
     private void buttonTextSetter(int buttonId, String textToSet) {
         android.widget.Button button = findViewById(buttonId);
         button.setText(textToSet);
     }
 
+    // takes in a list of EditText elements and validates them
+    // valid means they have an input, and that input can be parsed to a double
     private boolean validateEditTextList(List<EditText> textList) {
-        boolean inputIsValid = true;
-        boolean doNotScroll = false;
+        boolean inputIsValid = true; // this variable is the one that gets returned
+        boolean doNotScroll = false; // this flag is used to ensure only one scroll event is issued
 
         // text box validation
         for (int i = 0; i < textList.size(); i++) {
@@ -209,13 +223,16 @@ public final class AUC extends AppCompatActivity {
 
             if (!inputIsValid && !doNotScroll) {
                 this.focusOnView(textList.get(i), scrollView);
-                doNotScroll = true;
+                doNotScroll = true; // flip doNotScroll so this block isn't entered in subsequent loops
             }
         }
 
         return inputIsValid;
     }
 
+    // helper method to smoothly scroll the view to a desired UI element
+    // view is the desired UI element to scroll to
+    // scrollView is the containing ScrollView that will be scrolled
     private void focusOnView(final View view, final ScrollView scrollView){
         new Handler().post(new Runnable() {
             @Override
@@ -232,6 +249,9 @@ public final class AUC extends AppCompatActivity {
         });
     }
 
+    // helper method that validates the DateTimes the user inputted
+    // all dates and times must be provided
+    // preceding dose must occur before level 1; level 1 must occur before level 2
     private boolean validateDateTimeOrdering(boolean scroll) {
         boolean inputIsValid = true;
         boolean hasScrolled = scroll;
@@ -252,6 +272,8 @@ public final class AUC extends AppCompatActivity {
                 this.levelTwoTimeFragment
         );
 
+        // reset text color on buttons
+        precedingDoseTimeButton.setTextColor(Color.BLACK);
         levelOneDateButton.setTextColor(Color.BLACK);
         levelOneTimeButton.setTextColor(Color.BLACK);
         levelTwoDateButton.setTextColor(Color.BLACK);
@@ -341,6 +363,7 @@ public final class AUC extends AppCompatActivity {
         }
     }
 
+    // helper method to create LocalDateTime object based off values pulled from Date and Time pickers
     private LocalDateTime createLocalDateTimeObject(DatePickerFragment datePickerFragment, TimePickerFragment timePickerFragment) {
         return LocalDateTime.of(
                 datePickerFragment.getChosenYear(),
@@ -351,20 +374,26 @@ public final class AUC extends AppCompatActivity {
         );
     }
 
+    // public alias for calculateAuc because Android
+    // This is so I can have different buttons call the same function with different arguments
     public void calculateAucEstimate(View view) {
-        calculateAuc(false, false);
+        calculateAuc(CalculationType.ESTIMATE);
     }
 
+    // public alias for calculateAuc because Android
     public void calculateAucRevision(View view) {
-        calculateAuc(true, false);
+        calculateAuc(CalculationType.REVISION);
     }
 
-    public void suggestRevisedDose(View view) {
-        calculateAuc(false, true);
+    // public alias for calculateAuc because Android
+    public void calculateSuggestedDose(View view) {
+        calculateAuc(CalculationType.SUGGESTION);
     }
 
-    // calculateRevision true means also calculate AUC revision in addition to AUC estimate
-    private void calculateAuc(boolean calculateRevision, boolean suggestDose) {
+    // ESTIMATE:  we are only calculating an AUC estimate based on measured values from the patient
+    // SUGGESTION:  we are calculating a suggested revise dose in addition to the initial estimate
+    // REVISION:  we are calculating a revised dose in addition to the initial estimate
+    private void calculateAuc(CalculationType calculationType) {
         boolean inputsValid = true;
         boolean scroll = false;
 
@@ -372,28 +401,33 @@ public final class AUC extends AppCompatActivity {
         this.resetHints();
 
         // check that values entered in EditTexts are valid
-        if (!calculateRevision && !suggestDose) {
-            if (!this.validateEditTextList(this.estimateAucTextList)) {
-                inputsValid = false;
-                scroll = true;
-            }
-        } else if (!calculateRevision && suggestDose) {
-            List<EditText> newList = new ArrayList<>();
-            newList.addAll(estimateAucTextList);
-            newList.addAll(suggestDoseTextList);
+        switch (calculationType) {
+            case ESTIMATE: {
+                if (!this.validateEditTextList(this.estimateAucTextList)) {
+                    inputsValid = false;
+                    scroll = true;
+                }
+                break;
+            } case REVISION: {
+                List<EditText> newList = new ArrayList<>();
+                newList.addAll(estimateAucTextList);
+                newList.addAll(reviseAucTextList);
 
-            if (!this.validateEditTextList(newList)) {
-                inputsValid = false;
-                scroll = true;
-            }
-        } else if (calculateRevision && !suggestDose) {
-            List<EditText> newList = new ArrayList<>();
-            newList.addAll(estimateAucTextList);
-            newList.addAll(reviseAucTextList);
+                if (!this.validateEditTextList(newList)) {
+                    inputsValid = false;
+                    scroll = true;
+                }
+                break;
+            } case SUGGESTION: {
+                List<EditText> newList = new ArrayList<>();
+                newList.addAll(estimateAucTextList);
+                newList.addAll(suggestDoseTextList);
 
-            if (!this.validateEditTextList(newList)) {
-                inputsValid = false;
-                scroll = true;
+                if (!this.validateEditTextList(newList)) {
+                    inputsValid = false;
+                    scroll = true;
+                }
+                break;
             }
         }
 
@@ -454,7 +488,7 @@ public final class AUC extends AppCompatActivity {
         double predictedTrough = -1;
         double predictedAuc24 = -1;
 
-        if (suggestDose) {
+        if (calculationType == CalculationType.SUGGESTION) {
             goalAuc24 = Double.parseDouble(this.goalAuc24Input.getText().toString());
 
             suggestedT = AUCCalculator.calculateSuggestedT(halfLife);
@@ -463,7 +497,7 @@ public final class AUC extends AppCompatActivity {
             this.insertSuggestedDoseValues(suggestedT, recRevisedDose);
         }
 
-        if (calculateRevision) {
+        if (calculationType == CalculationType.REVISION) {
             chosenDoseRevision = Double.parseDouble(this.chosenDoseRevisionInput.getText().toString());
             chosenDoseIntervalRevision = Double.parseDouble(this.chosenDoseIntervalRevisionInput.getText().toString());
             chosenDoseInfusionDurationRevision = Double.parseDouble(this.chosenDoseInfusionDurationRevisionInput.getText().toString());
@@ -484,6 +518,7 @@ public final class AUC extends AppCompatActivity {
         EstimatedAucResult.setVisibility(View.VISIBLE);
     }
 
+    // inserts the suggested dose and suggested dosing interval into the UI
     private void insertSuggestedDoseValues(double suggestedT, double recRevisedDose) {
         String chosenDoseIntervalRevision = String.format(Locale.getDefault(), "%.0f", suggestedT);
         String chosenDoseRevision = String.format(Locale.getDefault(), "%.0f", recRevisedDose);
@@ -492,6 +527,7 @@ public final class AUC extends AppCompatActivity {
         chosenDoseRevisionInput.setText(chosenDoseRevision);
     }
 
+    // displays result of AUC estimate calculations to the user
     private void displayAUCEstimatedValues(double ke, double peak, double trough, double hl, double vd, double auc24) {
         android.widget.TextView keResult = findViewById(R.id.AUC_ke_result);
         android.widget.TextView peakResult = findViewById(R.id.AUC_peak_result);
@@ -508,6 +544,7 @@ public final class AUC extends AppCompatActivity {
         aucResult.setText(String.format(Locale.getDefault(),"%.0f", auc24));
     }
 
+    // displays the result of dose revision calculations to the user
     private void displayRevisedDoseValues(double revisedAuc24, double revisedPeak, double revisedTrough) {
         android.widget.TextView revisedDoseAUC24Result = findViewById(R.id.AUC_RD_predicted_AUC_result);
         android.widget.TextView revisedDoseTroughResult = findViewById(R.id.AUC_RD_trough_result);
