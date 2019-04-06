@@ -72,7 +72,7 @@ public final class AUCCalculator {
             suggestedT = 6;
         } else if (halfLife > 4 && halfLife <= 5.5) {
             suggestedT = 8;
-        } else if (halfLife >5.5 && halfLife <= 11) {
+        } else if (halfLife > 5.5 && halfLife <= 11) {
             suggestedT = 12;
         } else {
             suggestedT = 24;
