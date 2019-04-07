@@ -122,12 +122,12 @@ public final class AUCCalculator {
     public static double calculatePredictedAuc24(
             double predictedPeak,
             double predictedTrough,
-            double infusionDuration,
+            double revisedInfusionDuration,
             double ke,
-            double chosenDosingInterval
+            double revisedDosingInterval
     ) {
-        double predictedAucInf = (predictedPeak + predictedTrough) / 2 * infusionDuration;
+        double predictedAucInf = (predictedPeak + predictedTrough) / 2 * revisedInfusionDuration;
         double predictedAucElim = (predictedPeak - predictedTrough) / ke;
-        return (predictedAucInf + predictedAucElim) * 24 / chosenDosingInterval;
+        return (predictedAucInf + predictedAucElim) * 24 / revisedDosingInterval;
     }
 }

@@ -182,6 +182,7 @@ public final class AUC extends AppCompatActivity {
             });
         }
 
+        // hide AUC revision if user interacts with revision-related EditText fields
         for (EditText editTextItem : this.reviseAucTextList) {
             editTextItem.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -199,6 +200,27 @@ public final class AUC extends AppCompatActivity {
                 }
             });
         }
+
+        // clear related revision EditText fields if user interacts with suggest revised dose EditTexts
+        this.goalAuc24Input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    chosenDoseRevisionInput.setText("");
+                    chosenDoseIntervalRevisionInput.setText("");
+                    AucCalculationResult.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        this.goalAuc24Input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chosenDoseRevisionInput.setText("");
+                chosenDoseIntervalRevisionInput.setText("");
+                AucCalculationResult.setVisibility(View.GONE);
+            }
+        });
     }
 
     // helper method to set a button's text to a value programmatically
