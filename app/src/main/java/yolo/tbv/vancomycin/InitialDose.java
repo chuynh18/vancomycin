@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +32,8 @@ public final class InitialDose extends AppCompatActivity {
     private android.widget.CheckBox CNS_Input;
     private android.widget.CheckBox Manual_CrCl;
     private ConstraintLayout DosingView;
+    private ScrollView scrollView;
+    private List<android.widget.EditText> editTextList;
 
     // holds onto original value of AUC24, used by CNS_Input.setOnClickListener() in onCreate()
     String CNSOriginalValue;
@@ -64,12 +67,13 @@ public final class InitialDose extends AppCompatActivity {
         this.CNS_Input = findViewById(R.id.ID_CNS_Input);
         this.DosingView = findViewById(R.id.ID_dosing_result);
         this.Manual_CrCl = findViewById(R.id.ID_manual_CrCl_Input);
+        this.scrollView = findViewById(R.id.ID_ScrollView);
 
         // set Event Listeners on input fields to hide dosage info (so user never sees out of date dosage)
-        List<android.widget.EditText> inputs = Arrays.asList(AUCInput, WeightInput, AgeInput, SCrInput, CrClInput);
+        this.editTextList = Arrays.asList(AUCInput, WeightInput, AgeInput, SCrInput, CrClInput);
 
-        for (int i = 0; i < inputs.size(); i++) {
-            inputs.get(i).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        for (EditText editTextItem : this.editTextList) {
+            editTextItem.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
@@ -82,7 +86,7 @@ public final class InitialDose extends AppCompatActivity {
                 }
             });
 
-            inputs.get(i).setOnClickListener(new View.OnClickListener() {
+            editTextItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     DosingView.setVisibility(View.GONE);
@@ -94,8 +98,10 @@ public final class InitialDose extends AppCompatActivity {
             });
         }
 
-        for (int i = 0; i < inputs.size() - 1; i++) {
-            inputs.get(i).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        for (int i = 0; i < this.editTextList.size() - 1; i++) {
+            android.widget.EditText editTextItem = this.editTextList.get(i);
+
+            editTextItem.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -199,28 +205,8 @@ public final class InitialDose extends AppCompatActivity {
         boolean inputIsValid = true;
 
         // highlight inputs in red if missing
-        List<EditText> inputs = Arrays.asList(
-            this.AUCInput,
-            this.CrClInput,
-            this.WeightInput,
-            this.AgeInput,
-            this.SCrInput
-        );
-
-        for (int i = 0; i < inputs.size(); i++) {
-            String inputString = inputs.get(i).getText().toString();
-            if (inputString.length() == 0) {
-                inputs.get(i).setHintTextColor(Color.RED);
-                inputIsValid = false;
-            } else {
-                try {
-                    Double.parseDouble(inputString);
-                } catch (NumberFormatException e) {
-                    inputs.get(i).setText("");
-                    inputs.get(i).setHintTextColor(Color.RED);
-                    inputIsValid = false;
-                }
-            }
+        if (!UIHelper.validateEditTextList(this.editTextList, scrollView)) {
+            inputIsValid = false;
         }
 
         // set error if user forgets to select Female/Male
@@ -235,7 +221,7 @@ public final class InitialDose extends AppCompatActivity {
 
     // button press onClick method
     public void calculateInitialDose(View view) {
-        // update autofilled CrCl first, if applicable
+        // update auto-filled CrCl first, if applicable
         if (!Manual_CrCl.isChecked()) {
             autofillCrClIfPossible();
         }
@@ -278,14 +264,16 @@ public final class InitialDose extends AppCompatActivity {
         DosingView.setVisibility(View.VISIBLE);
         displayCalculatedDose(view, isObese, estimatedDailyDose, alternate15, alternate20, alternate25, alternate30);
         displayCalculatedValues(view, Ke, halfLife, Vd, finalClvan);
+
+        UIHelper.focusOnView(DosingView, scrollView);
     }
 
     // helper method to reset hint color to gray
     private void resetHints() {
-        List<EditText> inputs = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
+        List<EditText> editTextList = Arrays.asList(AUCInput, CrClInput, WeightInput, AgeInput, SCrInput);
 
-        for (int i = 0; i < inputs.size(); i++) {
-            inputs.get(i).setHintTextColor(Color.GRAY);
+        for (EditText editTextItem : editTextList) {
+            editTextItem.setHintTextColor(Color.GRAY);
         }
     }
 

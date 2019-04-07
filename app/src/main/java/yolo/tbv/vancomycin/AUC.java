@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -135,6 +136,8 @@ public final class AUC extends AppCompatActivity {
         this.levelTwoTimeFragment.setArguments(levelTwoTimeBundle);
 
         // create UI element lists
+
+        // input EditTexts used for calculating AUC estimate
         this.estimateAucTextList = Arrays.asList(
                 this.initialDoseInput,
                 this.initialDoseFreqInput,
@@ -143,19 +146,24 @@ public final class AUC extends AppCompatActivity {
                 this.measuredTroughInput
         );
 
+        // in addition to the above, these are necessary for calculating AUC revision
         this.reviseAucTextList = Arrays.asList(
                 this.chosenDoseRevisionInput,
                 this.chosenDoseIntervalRevisionInput,
                 this.chosenDoseInfusionDurationRevisionInput
         );
 
+        // in addition to estimateAucTextList, this one is necessary for calculating dose revision
         this.suggestDoseTextList = Arrays.asList(
                 this.goalAuc24Input
         );
 
         // attach event handlers to hide calculation results so users never see out-of-date values
-        for (int i = 0; i < this.estimateAucTextList.size(); i++) {
-            this.estimateAucTextList.get(i).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        // this may not be the friendliest UX, but given the life-or-death implications of this app,
+        // it's better to ensure that we always show calculation results that reflect user inputs.
+        // essentially, if the user interacts with any EditText, we immediately hide calculation results
+        for (EditText editTextItem : this.estimateAucTextList) {
+            editTextItem.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
@@ -165,7 +173,7 @@ public final class AUC extends AppCompatActivity {
                 }
             });
 
-            this.estimateAucTextList.get(i).setOnClickListener(new View.OnClickListener() {
+            editTextItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AucCalculationResult.setVisibility(View.GONE);
@@ -174,8 +182,8 @@ public final class AUC extends AppCompatActivity {
             });
         }
 
-        for (int i = 0; i < this.reviseAucTextList.size(); i++) {
-            this.reviseAucTextList.get(i).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        for (EditText editTextItem : this.reviseAucTextList) {
+            editTextItem.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
@@ -184,7 +192,7 @@ public final class AUC extends AppCompatActivity {
                 }
             });
 
-            this.reviseAucTextList.get(i).setOnClickListener(new View.OnClickListener() {
+            editTextItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AucCalculationResult.setVisibility(View.GONE);
@@ -197,56 +205,6 @@ public final class AUC extends AppCompatActivity {
     private void buttonTextSetter(int buttonId, String textToSet) {
         android.widget.Button button = findViewById(buttonId);
         button.setText(textToSet);
-    }
-
-    // takes in a list of EditText elements and validates them
-    // valid means they have an input, and that input can be parsed to a double
-    private boolean validateEditTextList(List<EditText> textList) {
-        boolean inputIsValid = true; // this variable is the one that gets returned
-        boolean doNotScroll = false; // this flag is used to ensure only one scroll event is issued
-
-        // text box validation
-        for (int i = 0; i < textList.size(); i++) {
-            String inputString = textList.get(i).getText().toString();
-            if (inputString.length() == 0) {
-                textList.get(i).setHintTextColor(Color.RED);
-                inputIsValid = false;
-            } else {
-                try {
-                    Double.parseDouble(inputString);
-                } catch (NumberFormatException e) {
-                    textList.get(i).setText("");
-                    textList.get(i).setHintTextColor(Color.RED);
-                    inputIsValid = false;
-                }
-            }
-
-            if (!inputIsValid && !doNotScroll) {
-                this.focusOnView(textList.get(i), scrollView);
-                doNotScroll = true; // flip doNotScroll so this block isn't entered in subsequent loops
-            }
-        }
-
-        return inputIsValid;
-    }
-
-    // helper method to smoothly scroll the view to a desired UI element
-    // view is the desired UI element to scroll to
-    // scrollView is the containing ScrollView that will be scrolled
-    private void focusOnView(final View view, final ScrollView scrollView){
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                int[] coordinates = new int[2];
-                int halfScreenHeight = Resources.getSystem().getDisplayMetrics().heightPixels / 2;
-
-                view.getLocationOnScreen(coordinates);
-                scrollView.smoothScrollTo(
-                        0,
-                        coordinates[1] + scrollView.getScrollY() - halfScreenHeight
-                );
-            }
-        });
     }
 
     // helper method that validates the DateTimes the user inputted
@@ -285,7 +243,7 @@ public final class AUC extends AppCompatActivity {
 
             if (!hasScrolled) {
                 hasScrolled = true;
-                focusOnView(precedingDoseTimeButton, scrollView);
+                UIHelper.focusOnView(precedingDoseTimeButton, scrollView);
             }
         }
 
@@ -301,7 +259,7 @@ public final class AUC extends AppCompatActivity {
 
             if (!hasScrolled) {
                 hasScrolled = true;
-                focusOnView(levelOneTimeButton, scrollView);
+                UIHelper.focusOnView(levelOneTimeButton, scrollView);
             }
         }
 
@@ -317,7 +275,7 @@ public final class AUC extends AppCompatActivity {
 
             if (!hasScrolled) {
                 hasScrolled = true;
-                focusOnView(levelTwoTimeButton, scrollView);
+                UIHelper.focusOnView(levelTwoTimeButton, scrollView);
             }
         }
 
@@ -332,7 +290,7 @@ public final class AUC extends AppCompatActivity {
             levelTwoTimeButton.setTextColor(Color.RED);
 
             if (!hasScrolled) {
-                focusOnView(levelTwoTimeButton, scrollView);
+                UIHelper.focusOnView(levelTwoTimeButton, scrollView);
             }
         }
 
@@ -350,16 +308,17 @@ public final class AUC extends AppCompatActivity {
             this.levelTwoTimeButton
         );
 
-        for (int i = 0; i < this.estimateAucTextList.size(); i++) {
-            this.estimateAucTextList.get(i).setHintTextColor(Color.GRAY);
+        // editTextList is the concatenation of estimateAucTextList and reviseAucTextList
+        List<EditText> editTextList = new ArrayList<>();
+        editTextList.addAll(this.estimateAucTextList);
+        editTextList.addAll(this.reviseAucTextList);
+
+        for (EditText editTextItem : editTextList) {
+            editTextItem.setHintTextColor(Color.GRAY);
         }
 
-        for (int i = 0; i < this.reviseAucTextList.size(); i++) {
-            this.reviseAucTextList.get(i).setHintTextColor(Color.GRAY);
-        }
-
-        for (int i = 0; i < pickerButtons.size(); i++) {
-            pickerButtons.get(i).setTextColor(Color.BLACK);
+        for (android.widget.Button button : pickerButtons) {
+            button.setTextColor(Color.BLACK);
         }
     }
 
@@ -403,7 +362,7 @@ public final class AUC extends AppCompatActivity {
         // check that values entered in EditTexts are valid
         switch (calculationType) {
             case ESTIMATE: {
-                if (!this.validateEditTextList(this.estimateAucTextList)) {
+                if (!UIHelper.validateEditTextList(this.estimateAucTextList, this.scrollView)) {
                     inputsValid = false;
                     scroll = true;
                 }
@@ -413,7 +372,7 @@ public final class AUC extends AppCompatActivity {
                 newList.addAll(estimateAucTextList);
                 newList.addAll(reviseAucTextList);
 
-                if (!this.validateEditTextList(newList)) {
+                if (!UIHelper.validateEditTextList(newList, this.scrollView)) {
                     inputsValid = false;
                     scroll = true;
                 }
@@ -423,7 +382,7 @@ public final class AUC extends AppCompatActivity {
                 newList.addAll(estimateAucTextList);
                 newList.addAll(suggestDoseTextList);
 
-                if (!this.validateEditTextList(newList)) {
+                if (!UIHelper.validateEditTextList(newList, this.scrollView)) {
                     inputsValid = false;
                     scroll = true;
                 }
@@ -470,6 +429,7 @@ public final class AUC extends AppCompatActivity {
                 this.levelTwoTimeFragment
         );
 
+        // get hours between the LocalDateTimes (beware: there's timezone conversion inside AUCCalculator)
         double hoursBetweenDoseAndLevelOne = AUCCalculator.hoursBetween(precedingDoseDateTime, levelOneDateTime);
         double hoursBetweenLevelOneAndLevelTwo = AUCCalculator.hoursBetween(levelOneDateTime, levelTwoDateTime);
 
@@ -488,6 +448,18 @@ public final class AUC extends AppCompatActivity {
         double predictedTrough = -1;
         double predictedAuc24 = -1;
 
+        // show calculated AUC estimated values
+        this.displayAUCEstimatedValues(ke, truePeak, trueTrough, halfLife, vd, auc24);
+
+        // show calculations for AUC estimate no matter the calculation type
+        this.EstimatedAucResult.setVisibility(View.VISIBLE);
+
+        // but only scroll to the Estimated AUC results if that was the intended calculation
+        if (calculationType == CalculationType.ESTIMATE) {
+            UIHelper.focusOnView(this.EstimatedAucResult, this.scrollView);
+        }
+
+        // insert suggested value back into the UI
         if (calculationType == CalculationType.SUGGESTION) {
             goalAuc24 = Double.parseDouble(this.goalAuc24Input.getText().toString());
 
@@ -495,8 +467,12 @@ public final class AUC extends AppCompatActivity {
             recRevisedDose = AUCCalculator.calculateVancoDose(goalAuc24, auc24, initialDose, initialDoseFreq, suggestedT);
 
             this.insertSuggestedDoseValues(suggestedT, recRevisedDose);
+
+            // scroll to UI element where we inserted new values
+            UIHelper.focusOnView(this.chosenDoseIntervalRevisionInput, this.scrollView);
         }
 
+        // calculate revision values and display them in the UI + unhide relevant view.
         if (calculationType == CalculationType.REVISION) {
             chosenDoseRevision = Double.parseDouble(this.chosenDoseRevisionInput.getText().toString());
             chosenDoseIntervalRevision = Double.parseDouble(this.chosenDoseIntervalRevisionInput.getText().toString());
@@ -508,14 +484,11 @@ public final class AUC extends AppCompatActivity {
 
             // show revised dose values
             this.displayRevisedDoseValues(predictedAuc24, predictedPeak, predictedTrough);
-            AucCalculationResult.setVisibility(View.VISIBLE);
+            this.AucCalculationResult.setVisibility(View.VISIBLE);
+
+            // scroll to calculation results
+            UIHelper.focusOnView(this.AucCalculationResult, this.scrollView);
         }
-
-        // show calculated AUC estimated values
-        this.displayAUCEstimatedValues(ke, truePeak, trueTrough, halfLife, vd, auc24);
-
-        // show calculations
-        EstimatedAucResult.setVisibility(View.VISIBLE);
     }
 
     // inserts the suggested dose and suggested dosing interval into the UI
@@ -523,8 +496,8 @@ public final class AUC extends AppCompatActivity {
         String chosenDoseIntervalRevision = String.format(Locale.getDefault(), "%.0f", suggestedT);
         String chosenDoseRevision = String.format(Locale.getDefault(), "%.0f", recRevisedDose);
 
-        chosenDoseIntervalRevisionInput.setText(chosenDoseIntervalRevision);
-        chosenDoseRevisionInput.setText(chosenDoseRevision);
+        this.chosenDoseIntervalRevisionInput.setText(chosenDoseIntervalRevision);
+        this.chosenDoseRevisionInput.setText(chosenDoseRevision);
     }
 
     // displays result of AUC estimate calculations to the user
@@ -566,41 +539,35 @@ public final class AUC extends AppCompatActivity {
         }
     }
 
+    private void dateTimeFragmentHelper(android.widget.Button button, DialogFragment fragment, String tag) {
+        this.AucCalculationResult.setVisibility(View.GONE);
+        button.setTextColor(Color.BLACK);
+        fragment.show(getSupportFragmentManager(), tag);
+    }
+
     // these functions are the onClick handlers...
     public void pickPrecedingDoseDate(View v) {
-        AucCalculationResult.setVisibility(View.GONE);
-        precedingDoseDateButton.setTextColor(Color.BLACK);
-        this.precedingDoseDateFragment.show(getSupportFragmentManager(), "datePicker");
+        dateTimeFragmentHelper(this.precedingDoseDateButton, this.precedingDoseDateFragment, "datePicker");
     }
 
     public void pickPrecedingDoseTime(View v) {
-        AucCalculationResult.setVisibility(View.GONE);
-        precedingDoseTimeButton.setTextColor(Color.BLACK);
-        this.precedingDoseTimeFragment.show(getSupportFragmentManager(), "timePicker");
+        dateTimeFragmentHelper(this.precedingDoseTimeButton, this.precedingDoseTimeFragment, "timePicker");
     }
 
     public void pickLevelOneDate(View v) {
-        AucCalculationResult.setVisibility(View.GONE);
-        levelOneDateButton.setTextColor(Color.BLACK);
-        this.levelOneDateFragment.show(getSupportFragmentManager(), "datePicker");
+        dateTimeFragmentHelper(this.levelOneDateButton, this.levelOneDateFragment, "datePicker");
     }
 
     public void pickLevelOneTime(View v) {
-        AucCalculationResult.setVisibility(View.GONE);
-        levelOneTimeButton.setTextColor(Color.BLACK);
-        this.levelOneTimeFragment.show(getSupportFragmentManager(), "timePicker");
+        dateTimeFragmentHelper(this.levelOneTimeButton, this.levelOneTimeFragment, "timePicker");
     }
 
     public void pickLevelTwoDate(View v) {
-        AucCalculationResult.setVisibility(View.GONE);
-        levelTwoDateButton.setTextColor(Color.BLACK);
-        this.levelTwoDateFragment.show(getSupportFragmentManager(), "datePicker");
+        dateTimeFragmentHelper(this.levelTwoDateButton, this.levelTwoDateFragment, "datePicker");
     }
 
     public void pickLevelTwoTime(View v) {
-        AucCalculationResult.setVisibility(View.GONE);
-        levelTwoTimeButton.setTextColor(Color.BLACK);
-        this.levelTwoTimeFragment.show(getSupportFragmentManager(), "timePicker");
+        dateTimeFragmentHelper(this.levelTwoTimeButton, this.levelTwoTimeFragment, "timePicker");
     }
     // end onClick handlers
 
